@@ -45,6 +45,8 @@ avez rendu service à GConfs !
 
 ## Bootstrap
 
+### Clean-up
+
 Les projects de conférences sont générés à partir d'un template regroupant
 tout un ensemble d'issues se repétant régulièrement lors de l'organisation de
 conférences. Certaines issues peuvent amenées à ne pas être utiles pour la
@@ -55,10 +57,28 @@ charge est générée, a **faire un premier passage sur la liste des
 issues afin de passer en _Rejected_ celles qui ne concernent pas la
 conférence**, par exemple "Contacter VJN pour le TP" si aucun TP n'est prévu.
 
+### Assignations
+
+Une fois les issues inutiles rejetées, vous pouvez vous concentrer sur celles
+existantes et les assigner à qui de droit : les issues concernant le sujet de
+la conférence au conférencier, les issues concernant l'affiche à celui chargé
+de créer l'affiche s'il a déjà été défini, les issues concernant tout ce qui
+est fiche event à vous même, etc... En revanche, pour tout ce qui est
+communication,
+
+Rappel : vous pouvez voir les issues qui vont sont assignées sur [votre page
+personnelle](http://redmine.gconfs.fr/my/page).
+
 ## Au quotidien
 
-* Ping via les notes
-* Assigner les issues au fur et à mesure
+En tant que responsable, le Redmine vous permet normalement de gérer une grande
+partie des étapes de la préparation d'une conférence, notamment via les moyens
+suviants :
+
+* **Notes** : vous pouvez laisser des notes dans les issues, n'hésitez pas à
+  vous en servir pour repinger quelqu'un qui y serait assigner, voir où il en
+  est, etc.
+* Assigner les issues aux personnes concernées, même si la majorité 
 * Tenir à jour le pad
 
 # Projects
