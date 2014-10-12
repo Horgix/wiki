@@ -48,14 +48,17 @@ avez rendu service à GConfs !
 ### Root projects
 
 Les projects, que vous trouverez sur
-http://redmine.gconfs.fr/projects, sont à l'heure actuelle divisés en
-4 grandes parties :
+[la page projects du Redmine](http://redmine.gconfs.fr/projects), sont à
+l'heure actuelle divisés en 4 grandes parties :
 
-* Admin GConfs : administration de l'association
-* Conférences : conférences organisées
-* Events : évènements de type JDMI, JPO, Forum des associations, etc.
-* SysAdmin : administration du serveur de GConfs (visible uniquement
-  par les personnes concernées)
+* [Admin GConfs](http://redmine.gconfs.fr/projects/administration-de-l-association) :
+  administration de l'association
+* [Conférences](http://redmine.gconfs.fr/projects/conferences) : conférences
+  organisées
+* [Events](http://redmine.gconfs.fr/projects/events) : évènements de type JDMI,
+  JPO, Forum des associations, etc.
+* [SysAdmin](http://redmine.gconfs.fr/projects/sysadmin) : administration du
+  serveur de GConfs (visible uniquement par les personnes concernées)
 
 ### Versions des conférences
 
@@ -165,11 +168,12 @@ réaliser.
 
 ### Subject
 
-en.wikipedia.org/wiki/KISS_principle
+De manière générale, essayez de respecter le [principe
+KISS](http://en.wikipedia.org/wiki/KISS_principle) pour vos titres d'issues :)
 
 ### Description
 
-Détails concernant votre issue
+Détails concernant votre issue.
 
 ### Priority
 
