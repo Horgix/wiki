@@ -41,6 +41,26 @@ Si votre issue a bien été completée, un admin ou le responsable de la
 conférence se chargera de passer l'issue à **Closed**. Voilà, vous
 avez rendu service à GConfs !
 
+# HOW-TO - Être responsable d'une conférence
+
+## Bootstrap
+
+Les projects de conférences sont générés à partir d'un template regroupant
+tout un ensemble d'issues se repétant régulièrement lors de l'organisation de
+conférences. Certaines issues peuvent amenées à ne pas être utiles pour la
+conférence dont vous êtes responsable, par exemple celles concernant les TPs.
+
+Les responsables sont donc invités, lorsque la conférence dont ils ont la
+charge est générée, a **faire un premier passage sur la liste des
+issues afin de passer en _Rejected_ celles qui ne concernent pas la
+conférence**, par exemple "Contacter VJN pour le TP" si aucun TP n'est prévu.
+
+## Au quotidien
+
+* Ping via les notes
+* Assigner les issues au fur et à mesure
+* Tenir à jour le pad
+
 # Projects
 
 ## Hiérarchie
