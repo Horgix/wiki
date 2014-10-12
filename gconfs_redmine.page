@@ -73,13 +73,14 @@ personnelle](http://redmine.gconfs.fr/my/page).
 
 En tant que responsable, le Redmine vous permet normalement de gérer une grande
 partie des étapes de la préparation d'une conférence, notamment via les moyens
-suviants :
+suivants :
 
 * **Notes** : vous pouvez laisser des notes dans les issues, n'hésitez pas à
   vous en servir pour repinger quelqu'un qui y serait assigner, voir où il en
   est, etc.
 * Assigner les issues aux personnes concernées, même si la majorité 
-* Tenir à jour le pad
+* Tenir à jour le pad qui est normalement linké dans la description de la
+  conférence. A terme, ceci sera migré sur un wiki dédié à GConfs
 
 # Projects
 
@@ -102,9 +103,9 @@ l'heure actuelle divisés en 4 grandes parties :
 
 ### Versions des conférences
 
-De nombreuses conférences se répètent chaque année, notamment celles
-pour les Sups en début d'année comme C# ou BDSP. Comment gérer ceci
-via le Redmine ? Plusieurs options s'offrent à nous :
+De nombreuses conférences se répètent chaque année, notamment celles pour les
+Sups telles que C# ou BDSP. Comment gérer ceci via le Redmine ? Plusieurs
+options s'offrent à nous :
 
 Avoir un subproject par conférence et par année : on se retrouverait
 donc par exemple avec l'architecture suivante :
@@ -133,11 +134,11 @@ elles-mêmes
         ├── BDSP
         └── C#
 
-Jusque-là, ça donne une hiérarchie plutôt moche, et surtout très peu
-claire, surtout lorsque viendront s'empiler les conférences de chaque
-année ! Nous allons donc profiter d'une feature de Redmine, qui
-s'appelle les **Versions** et qui nous permettra d'avoir une
-architecture simple, claire et intuitive de la forme :
+Jusque-là, les hiérarchies résultantes sont plutôt hideuses, et surtout très
+peu claires, surtout lorsque viendront s'empiler les conférences de chaque
+année. Nous allons donc profiter d'une feature de Redmine, qui s'appelle les
+**Versions** et qui permettra d'avoir une architecture simple, claire et
+intuitive de la forme :
 
     Conférences
     ├── BDSP
@@ -146,7 +147,18 @@ architecture simple, claire et intuitive de la forme :
 
 ## Versions
 
-TODO
+Les *Versions* sont des sortes de boîtes dans lesquells on peut empiler des
+issues. Ainsi, la gestion de conférences d'années en années est grandement
+faciliter : on duplique la boîte, change l'étiquette dessus de "n-n+1" à "n+1 -
+n+2", et on passe toutes les issues dedans à un status *New*. Voilà, on a
+récupéré toutes les issues de l'année d'avant dans un état neuf, sans assignee,
+etc. Cette gestion via les *Versions* offre encore d'autres avantages dont
+notamment :
+
+* Une visualisation aisée de l'avancement de l'organisation d'une conférence,
+  via l'onglet **Roadmap**.
+* La possibilité de voir facilement les issues d'une année donnée avec les
+  options de filtering
 
 # Issues
 
@@ -217,11 +229,35 @@ Détails concernant votre issue.
 
 ### Priority
 
-TODO
+5 niveaux de priorité sont définis :
+
+* Bas
+* Normal (valeur par **défaut**)
+* Haut
+* Urgent
+* Immédiat
+
+Les noms s'exprimants plutôt d'eux-même, nous ne nous attarderons pas là
+dessus. Veillez à ne pas augmenter la priorité de n'importe quoi, car dans ce
+cas ce champ perdrait beaucoup de son utilité !
 
 ### Category
 
-TODO
+Les catégories sont définies par projet. Elles sont un peu comme le champ
+"Tracker" mais en plus général ou plus précis selon leur utilisation. Voici
+celles actuellement définies, bien que susceptibles de changer :
+
+* Admin GConfs : None
+* Conférences : les catégories sont définies dans les project des conférences
+  elles-mêmes, vous trouverez les suivantes :
+  * ADM
+  * Affiche
+  * Communication
+  * Contenu
+  * Fiche Event
+  * Setup
+* Events : None
+* SysAdmin : None
 
 ### Target version
 
