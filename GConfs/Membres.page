@@ -2,13 +2,17 @@
 
 ## Ajout à la mailing list
 
+Pour ajouter un nouveau membre à la mailing list, il faut passer par
+l'interface des Google Apps : FIXME: add link
+Le groupe associé à everyone@gconfs.fr est celui nommé "Membres", et c'est dans
+celui-ci qu'il faut créer le nouvel utilisateur
+
 ## Mail de bienvenue
 
-Après ajout d'un membre à la mailing list, il est important de lui
-envoyer un mail afin de l'informer et de lui indiquer la marche à
-suivre pour utiliser les différents services internes. Ci-dessous se
-trouve un mail type de base, regroupant la plupart des éléments
-importants.
+Après ajout d'un membre à la mailing list, il est important de lui envoyer un
+mail afin de l'informer et de lui indiquer la marche à suivre pour utiliser les
+différents services internes. Ci-dessous se trouve un mail type de base,
+regroupant la plupart des éléments importants.
 
     Bonjour,
 
