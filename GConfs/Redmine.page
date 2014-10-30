@@ -94,7 +94,7 @@ l'heure actuelle divisés en 4 grandes parties :
 * [Events](http://redmine.gconfs.fr/projects/events) : évènements de type JDMI,
   JPO, Forum des associations, etc.
 * [SysAdmin](http://redmine.gconfs.fr/projects/sysadmin) : administration du
-  serveur de GConfs (visible uniquement par les personnes concernées)
+  serveur de GConfs et des services associés
 
 ### Versions des conférences
 
@@ -144,14 +144,14 @@ intuitive de la forme :
 
 Les *Versions* sont des sortes de boîtes dans lesquells on peut empiler des
 issues. Ainsi, la gestion de conférences d'années en années est grandement
-faciliter : on duplique la boîte, change l'étiquette dessus de "n-n+1" à "n+1 -
-n+2", et on passe toutes les issues dedans à un status *New*. Voilà, on a
+faciliter : on duplique la boîte, change l'étiquette dessus de "n - n+1" à "n+1
+- n+2", et on passe toutes les issues dedans à un status *New*. Voilà, on a
 récupéré toutes les issues de l'année d'avant dans un état neuf, sans assignee,
 etc. Cette gestion via les *Versions* offre encore d'autres avantages dont
 notamment :
 
 * Une visualisation aisée de l'avancement de l'organisation d'une conférence,
-  via l'onglet **Roadmap**.
+  via l'onglet **Roadmap**
 * La possibilité de voir facilement les issues d'une année donnée avec les
   options de filtering
 
@@ -203,6 +203,50 @@ le site, sur les pads, etc.
 * Resolved
 * Closed
 * Rejected
+
+Ces status représente le cycle de vie d'une issue. En général, il sera composé
+de **New -> In progress -> Resolved -> Closed**.
+
+**New** : c'est le status à la création d'une issue. Une fois ce status changé,
+une issue ne doit normalement jamais y revenir, de par la présence d'un status
+*Reopened*.
+
+**Reopened** : idéalement, une note devrait toujours être ajoutée à l'issue
+lors d'un changement de status à *reopened* expliquant pourquoi. Ce status
+possède 2 intérêts principaux :
+
+    * Ré-ouvrir une issue *closed* ou *rejected*, parce-qu'elle avait été
+      *rejected* par erreur, ou que l'on s'est aperçu plus tard qu'elle n'était
+      pas vraiment résolue
+    * Redémarrer le cycle de vie de l'issue si son *assignee* l'a passé en
+      *resolved* mais que l'admin qui a vérifié avant de passer à *closed* a
+      jugé qu'elle n'était pas vraiment résolue
+
+**In progress** : c'est l'*assignee* qui devrait passer une issue à ce status,
+afin d'informer qu'il est en train de travailler dessus. Il est éventuellement
+évitable pour les issues de tracker *mail* ou celles très courtes sur
+lesquelles il n'y a aucun risque de concurrency, mais cela doit rester
+exceptionnel.
+
+**Resolved** : lorsqu'une issue est satisfaite, ce status est là pour en
+notifier les personnes concernées, et constitue la dernière étape de la
+réalisation d'une tâche avant la vérification finale.
+
+**Closed** : ce status est celui fermant réellement une issue, après
+vérification par une autre personne que celle l'ayant réalisé. Seuls 3 types de
+users ont la possibilité de close une issue :
+
+    * les admins
+    * le responsable d'une conférence donnée
+    * l'user ayant créé l'isue
+
+**Rejected** : dernier status, ne pouvant être changé qu'en *reopened*. Il est
+utilisé principalement pour :
+
+    * Rejeter une issue qui n'a pas lieu d'être pour une conférence, après que
+      le projet en question ait été généré depuis le template. Exemple : les
+      issues concernant le TP pour une conférence n'en ayant pas
+    * Rejeter une issue dont le sujet à été abandonné
 
 ### Assignee
 
