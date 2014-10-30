@@ -204,8 +204,8 @@ le site, sur les pads, etc.
 * Closed
 * Rejected
 
-Ces status représente le cycle de vie d'une issue. En général, il sera composé
-de **New -> In progress -> Resolved -> Closed**.
+Ces status permettent de suivre le cycle de vie d'une issue. En général, il
+sera composé de **New -> In progress -> Resolved -> Closed**.
 
 **New** : c'est le status à la création d'une issue. Une fois ce status changé,
 une issue ne doit normalement jamais y revenir, de par la présence d'un status
