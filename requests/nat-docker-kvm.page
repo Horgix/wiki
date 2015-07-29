@@ -1,0 +1,115 @@
+Coucou, j'ai un cas un peu à la con et mes connaissances en réseau commencent à
+atteindre leurs limites. J'ai :
+
+* A : une VM KVM dans un network géré par libvirt qui est NATé (172.18.5.X)
+* B : un container docker avec du coup le networking géré par docker (172.17.0.29)
+* pedobear : l'host commun au docker et au KVM
+
+J'arrive à contacter B depuis A, et B arrive à répondre, sauf en UDP, pas moyen
+de recontacter la machine source, je suppose que c'est parce qu'au niveau du
+NAT, côté host, vu qu'il n'attend pas de réponse en UDP le port ne reste pas
+ouvert pour la réponse.
+
+IP de la VM KVM :
+
+    A$ mip
+    NS: Current
+        lo:      127.0.0.1    /8
+        [eth0]:  172.18.5.14  /16
+
+B répond aux pings de A :
+
+    A$ ping 172.17.0.29 -c 1
+    PING 172.17.0.29 (172.17.0.29) 56(84) bytes of data.
+    64 bytes from 172.17.0.29: icmp_seq=1 ttl=63 time=0.368 ms
+    --- 172.17.0.29 ping statistics ---
+    1 packets transmitted, 1 received, 0% packet loss, time 0ms
+    rtt min/avg/max/mdev = 0.368/0.368/0.368/0.000 ms
+
+B répond aux requests HTTP (TCP du coup) de A :
+
+    A$ curl -I 172.17.0.29/cobbler 2> /dev/null | head -n 1
+    HTTP/1.1 301 Moved Permanently
+
+A ne reçoit jamais de réponse de B lors de requests TFTP (request et réponse en
+UDP) :
+
+    A$ atftp 172.17.0.29
+    tftp> get pxelinux.0
+    timeout: retrying...
+    ^C
+
+Request envoyée par A :
+
+    $ tcpdump -i mypxebridge "not port 22"
+    11:02:54.303678 IP 172.18.5.14.33723 > 172.17.0.29.tftp:  19 RRQ "pxelinux.0" octet 
+
+Request reçue + tentative de réponse par B :
+
+    $ tcpdump -i docker0 "not port 22"
+    11:02:54.303734 IP pedobear.33723 > 172.17.0.29.tftp:  19 RRQ "pxelinux.0" octet 
+    11:02:54.307337 IP 172.17.0.29.43306 > pedobear.33723: UDP, length 516
+    11:02:54.307378 IP pedobear > 172.17.0.29: ICMP pedobear udp port 33723 unreachable, length 552
+
+iptables nat de l'host :
+
+    pedobear$ iptables -L -t nat
+    Chain PREROUTING (policy ACCEPT)
+    target     prot opt source               destination
+    DOCKER     all  --  anywhere             anywhere             ADDRTYPE match dst-type LOCAL
+    Chain INPUT (policy ACCEPT)
+    target     prot opt source               destination
+    Chain OUTPUT (policy ACCEPT)
+    target     prot opt source               destination
+    DOCKER     all  --  anywhere            !127.0.0.0/8          ADDRTYPE match dst-type LOCAL
+    Chain POSTROUTING (policy ACCEPT)
+    target     prot opt source               destination
+    RETURN     all  --  172.18.0.0/16        base-address.mcast.net/24
+    RETURN     all  --  172.18.0.0/16        255.255.255.255
+    MASQUERADE  tcp  --  172.18.0.0/16       !172.18.0.0/16        masq ports: 1024-65535
+    MASQUERADE  udp  --  172.18.0.0/16       !172.18.0.0/16        masq ports: 1024-65535
+    MASQUERADE  all  --  172.18.0.0/16       !172.18.0.0/16
+    RETURN     all  --  192.168.122.0/24     base-address.mcast.net/24
+    RETURN     all  --  192.168.122.0/24     255.255.255.255
+    MASQUERADE  tcp  --  192.168.122.0/24    !192.168.122.0/24     masq ports: 1024-65535
+    MASQUERADE  udp  --  192.168.122.0/24    !192.168.122.0/24     masq ports: 1024-65535
+    MASQUERADE  all  --  192.168.122.0/24    !192.168.122.0/24
+    MASQUERADE  all  --  172.17.0.0/16        anywhere
+    Chain DOCKER (2 references)
+    target     prot opt source               destination
+
+iptables de l'host :
+
+    pedobear$ iptables -vL
+    Chain INPUT (policy ACCEPT 5065K packets, 6043M bytes)
+     pkts bytes target     prot opt in          out     source               destination
+       50  3310 ACCEPT     udp  --  mypxebridge any     anywhere             anywhere             udp dpt:domain
+        0     0 ACCEPT     tcp  --  mypxebridge any     anywhere             anywhere             tcp dpt:domain
+       44 18380 ACCEPT     udp  --  mypxebridge any     anywhere             anywhere             udp dpt:bootps
+        0     0 ACCEPT     tcp  --  mypxebridge any     anywhere             anywhere             tcp dpt:bootps
+        0     0 ACCEPT     udp  --  virbr0      any     anywhere             anywhere             udp dpt:domain
+        0     0 ACCEPT     tcp  --  virbr0      any     anywhere             anywhere             tcp dpt:domain
+        0     0 ACCEPT     udp  --  virbr0      any     anywhere             anywhere             udp dpt:bootps
+        0     0 ACCEPT     tcp  --  virbr0      any     anywhere             anywhere             tcp dpt:bootps
+    Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+     pkts bytes target     prot opt in          out             source               destination
+     457K  676M ACCEPT     all  --  any         mypxebridge     anywhere             172.18.0.0/16        ctstate RELATED,ESTABLISHED
+     248K   13M ACCEPT     all  --  mypxebridge any             172.18.0.0/16        anywhere
+        0     0 ACCEPT     all  --  mypxebridge mypxebridge     anywhere             anywhere
+        0     0 ACCEPT     all  --  any         virbr0          anywhere             192.168.122.0/24     ctstate RELATED,ESTABLISHED
+        0     0 ACCEPT     all  --  virbr0      any             192.168.122.0/24     anywhere
+        0     0 ACCEPT     all  --  virbr0      virbr0          anywhere             anywhere
+        0     0 REJECT     all  --  any         virbr0          anywhere             anywhere             reject-with icmp-port-unreachable
+        0     0 REJECT     all  --  virbr0      any             anywhere             anywhere             reject-with icmp-port-unreachable
+    98054  137M DOCKER     all  --  any         docker0         anywhere             anywhere
+    98054  137M ACCEPT     all  --  any         docker0         anywhere             anywhere             ctstate RELATED,ESTABLISHED
+    64215 3521K ACCEPT     all  --  docker0     !docker0        anywhere             anywhere
+        0     0 ACCEPT     all  --  docker0     docker0         anywhere             anywhere
+    Chain OUTPUT (policy ACCEPT 3072K packets, 296M bytes)
+     pkts bytes target     prot opt in     out          source               destination
+       44 14432 ACCEPT     udp  --  any    mypxebridge  anywhere             anywhere             udp dpt:bootpc
+        0     0 ACCEPT     udp  --  any    virbr0       anywhere             anywhere             udp dpt:bootpc
+    Chain DOCKER (1 references)
+     pkts bytes target     prot opt in     out     source               destination
+
+
