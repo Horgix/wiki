@@ -51,6 +51,13 @@ Request reçue + tentative de réponse par B :
     11:02:54.307337 IP 172.17.0.29.43306 > pedobear.33723: UDP, length 516
     11:02:54.307378 IP pedobear > 172.17.0.29: ICMP pedobear udp port 33723 unreachable, length 552
 
+Sur le veth du docker :
+
+    $ tcpdump -i veth1e5438a "not port 22"
+    11:42:20.501428 IP pedobear.60979 > 172.17.0.29.tftp:  19 RRQ "pxelinux.0" octet
+    11:42:20.504466 IP 172.17.0.29.60875 > pedobear.60979: UDP, length 516
+    11:42:20.504506 IP pedobear > 172.17.0.29: ICMP pedobear udp port 60979 unreachable, length 552
+
 iptables nat de l'host :
 
     pedobear$ iptables -L -t nat
