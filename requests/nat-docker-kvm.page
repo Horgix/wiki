@@ -78,6 +78,33 @@ iptables nat de l'host :
     Chain DOCKER (2 references)
     target     prot opt source               destination
 
+Avec le -nv en plus :
+
+    pedobear$ iptables -t nat -nvL
+    Chain PREROUTING (policy ACCEPT 346K packets, 50M bytes)
+     pkts bytes target     prot opt in     out     source               destination
+      336  196K DOCKER     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type LOCAL
+    Chain INPUT (policy ACCEPT 110K packets, 20M bytes)
+     pkts bytes target     prot opt in     out     source               destination
+    Chain OUTPUT (policy ACCEPT 86085 packets, 5351K bytes)
+     pkts bytes target     prot opt in     out     source               destination
+        0     0 DOCKER     all  --  *      *       0.0.0.0/0           !127.0.0.0/8          ADDRTYPE match dst-type LOCAL
+    Chain POSTROUTING (policy ACCEPT 86085 packets, 5351K bytes)
+     pkts bytes target     prot opt in     out     source               destination
+        0     0 RETURN     all  --  *      *       172.18.0.0/16        224.0.0.0/24
+        0     0 RETURN     all  --  *      *       172.18.0.0/16        255.255.255.255
+       51  3060 MASQUERADE  tcp  --  *      *       172.18.0.0/16       !172.18.0.0/16        masq ports: 1024-65535
+       16  1026 MASQUERADE  udp  --  *      *       172.18.0.0/16       !172.18.0.0/16        masq ports: 1024-65535
+        5   420 MASQUERADE  all  --  *      *       172.18.0.0/16       !172.18.0.0/16
+        0     0 RETURN     all  --  *      *       192.168.122.0/24     224.0.0.0/24
+        0     0 RETURN     all  --  *      *       192.168.122.0/24     255.255.255.255
+        0     0 MASQUERADE  tcp  --  *      *       192.168.122.0/24    !192.168.122.0/24     masq ports: 1024-65535
+        0     0 MASQUERADE  udp  --  *      *       192.168.122.0/24    !192.168.122.0/24     masq ports: 1024-65535
+        0     0 MASQUERADE  all  --  *      *       192.168.122.0/24    !192.168.122.0/24
+     3357  208K MASQUERADE  all  --  *      !docker0  172.17.0.0/16        0.0.0.0/0
+    Chain DOCKER (2 references)
+     pkts bytes target     prot opt in     out     source               destination
+
 iptables de l'host :
 
     pedobear$ iptables -vL
