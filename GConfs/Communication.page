@@ -1,0 +1,20 @@
+# Affiches
+
+Les éléments suivants doivent être présents sur l'affiche :
+
+* Titre
+* Eventuel sous-titre
+* Logo GConfs
+* Logo Epita
+* Logo Epitech
+* Date/Heure incluant les éléments suivants :
+  * Jour de la semaine (Lundi ... Dimanche)
+  * Jour du mois (1 ... 31)
+  * Mois (Janvier ... Décembre)
+  * Année
+  * Heure de début
+* Lieu
+* Nom du (des) speaker(s) avec éventuels pseudos, sous la forme suivante :
+  * Prénom "Pseudo" Nom
+* Adresse de contact GConfs
+* Adresse du site web GConfs
