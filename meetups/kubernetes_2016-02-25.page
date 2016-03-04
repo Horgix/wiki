@@ -1,0 +1,530 @@
+# Introduction
+
+* Thursday, February 25, 2016
+* Meetup Kubernetes #1 @Google
+
+# 1er talk
+
+* Title: Kubernetes Architecture & Introduction
+* Speaker: Dr. Stefan Schimanski aka @the1stein
+
+## Abstract:
+
+In this talk we will start with some archeology of the roots of Kubernetes and
+then dive deep directly into the core concepts of pods, services and
+replication controllers, all very hands-on, looking behind the curtain. We
+will setup our own Kubernetes cluster, start deploying a webapp and even write
+our own controller in Python using the Kubernetes API, scaling up and down our
+app. Finally we will zoom out to the high-level architecture of Kubernetes.
+
+## Bio:
+
+Dr. Stefan Schimanski is a long-time open source contributor, now at
+Mesosphere as a Distributed Systems Engineer building Kubernetes on Mesos.
+Previously, while helping companies to build large-scale Mesos based backends,
+Stefan got into the internals of cluster managers by contributing a lot to
+Marathon getting it ready for production. Before that he was leading the Linux
+efforts at German Air Traffic Control.
+
+TL;DR:
+
+* Distributed Systems Engineer @ Mesosphere
+* Working on Kurbenetes on Mesos
+
+## Content
+
+### Introduction
+
+Last meetup 1 year ago : 20 people at Hamburg
+
+Kubernetes started as an [python based agent to deploy decarative pods using
+docker](https://github.com/googlearchive/container-agent)
+
+### Pods
+
+A pod is basically a container group defined by the manifest to share :
+
+* network namespaces
+* volumes
+
+Didn't change much from the beginning
+
+In Docker terms (demo time) :
+
+1. docker run --name pod busybox sleep 999999
+2. docker run --name webserver --ipc=container:pod --net=container:pod --rm -it
+   python python -m http.server 80
+3. docker run --name curlcontainer --ipc=container:pod --net=container:pod --rm
+   -it busybox /bin/sh
+
+1. "pod" is the container that serve as a central container to allow connecting
+the 2 other containers.
+2. "webserver" simply run a webserver, linked to the "pod" container
+3. "curlcontainer" finally is another busybox container which we link with the
+   "pod" container too
+
+Now the interesting part : if you try to `curl` or `wget` 127.0.0.1 from the
+"curlcontainer", it will hit the webserver, since they share the same network
+namespace ! At the end, that's what a pod is.
+
+TL;DR : Docker, same network namespace => same IP, hit localhost
+
+
+Get a kubernetes cluster : mesos/docker with kube-up
+
+clone kubernetes
+KUBERNETES_PROVIDER => mesos/docker clcuster/kube-up.sh
+* kubecetl=\_output/local/bin/darwin/amd53/kubectl
+* kubectl get pods
+
+Same pod in kubernets => only yaml !
+metadata + spec + kond + apiversion
+like docker-compose on steroids ?
+
+demotime  again o/
+
+kubectl get pods + create -f
+
+kubectl describe => show "events" ! docker isnpect++++
+
+Kubernetes core architecture : the apiserver
+
+all the cluster state !
+no logic, only storage and API
+
+* Default namespace : secrets; RCs, jobs, volumes, pods, services, ...
+* Lube-systeme namespace : dns, ui, fluentd, ...
+* store state => etcd, clu, ster
+
+REST API \o/
+Cluster uses the same API to hit apiserver to get states/infos
+
+node (kubelet) : launches pods with docker or rkt, watches apiserver for new
+pods using the same api
+
+Scheduler and controller manager also use the api to assign pods to nodes
+
+=> ASSIGNATION ! Pods => node
+How is it selected ? => guess through the apiserver
+
+kubernetes.io/v1.1 => documentation
+Kubecon => London, March 2016
+
+
+JSON/YAML/REST schemas defined :o
+deployment examples in the github (master/examples)
+
+
+Source of truth : api/v1/types.go (read it o/ 2h.)
+? not found :(
+
+kubectl --v=6 => SHOW THE FUCKING API REQUESTS + ANSWERS
+
+### Labels  &annotations
+
+in metadata block of every api resource :
+
+labels (for user/admin)
+annotations (for tooling)
+
+labels can be used to filter objects SERVERSIDE (annotations can't)
+
+kubectl get nodes -l gen=2011
+?
+
+
+Getting the pod IP, how do we do that ?
+
+kubectl get pod mypod -o yaml
+=> Every pod has it's own IP. NOT every container (?) => Docker networks
+Makes things easier...
+Ports are accessible by default, etc
+
+
+From pod to pod :
+
+cluster routable IPs
+native ports without conflicts (see above)
+no "pod" service discovery available
+
+
+Consul \o/
+
+
+A service (brilliant)
+a service as a static API object
+kubectl create -f service.yaml
+virtual, but static IP (usually 10.x.y.z)
+No service discovery necessary
+
+=> service that create a vip in the middle of consumer and the pods, and which
+routes the traffic to one of the pods
+=> Cluster IP
+
+implemented using iptables (redirect rules)
+=> Docker ambassador pattern ?
+
+(Serice includes a selector to match pods that are included (?)°
+
+implemented by kube-proxy : in user-mode (simple proxy) or using iptables
+ON EVERY NODE
+/!\ traffic fro, a pod is intercepted on the host of the pod, not the
+destination of the connection
+
+kube-proxy relays requests, and is accessible  by other hosts
+
+### Service endpoints
+
+1 endpoint for each matching pod (kubectl get endpoints)
+endpoit = pod-IP:port
+
+
+State plus Control
+
+state consists of all API objects stored on the api server
+
+core kubernetes architecture principle :
+logic is in control loops ("controllers") which :
+* are state-less (can recover fromfailure)
+* and decoupled (communication via API-server)
+Read / Write /C 
+
+"Ok, there is my critical pod, 99% uptime at least, at least 45 pods ups"
+Ok, we create one pod => If there is an exception, we have no more pods, fail.
+=> A control loop to run pods
+Input : REPLICAS = number of mypods that should be running
+
+ALgorithm :
+running = number of running pods with label name=mypod
+if running > replicas : delete some
+else : add some pods
+
+DEMO fail :D
+ou pas ! --grace-period=0
+
+in real live, we have a replication controller and we don't do it by hand in
+python :p
+
+Kubernetes Replication Controllers : "RCs"
+kubectl create
+kubectl scale 
+
+
+### Other controllers
+
+DaemonSets run pods once per node
+MyGaleraController might run mysql galera instances
+myhaproxyupdatecontroller might write haproxy.conf
+Mynodeupdatecontroller : might do rolling security updates on nodes or of
+containers
+
+controllers everywhere
+
+Controller manager :
+node controller
+endpoint
+replication
+daemonset
+service
+token
+resource auotq
+persistent volule
+service account
+;...
+
+Hiring in Hamburg and SF
+
+
+## Questions
+
+how kubernetes integrates in mesos ?
+
+Mesos see kubernetes as juste an API
+=> launch tasks in the mesos cluster
+
+
+Mesos used it as the base of openshift
+Production ready from day 1
+
+
+# 2eme talk
+
+* Retour d'expérience GKE en production chez Clustree
+* par Romain Vrignaud aka @fitzdsl
+
+## Abstract
+
+Clustree, plateforme SaaS RH, utilise un unique cluster Kubernetes / GKE en
+production depuis Juillet pour l'ensemble de sa stack. Ce talk a pour but de
+fournir un retour d'expérience aussi bien technique qu'organisationnel sur
+cette migration. Nous aborderons les aspects positifs, les outils utilisés
+pour gérer la production, les peines et les attentes de l'équipe technique. 
+
+## Content
+
+Clustree
+Startup founded in 2013
+SaaS pour les services RH grands comptes
+Données internes et externes pour fournir de l'intelligence genre big data
+
+
+Clustree stack
+
+* Full python microservices (~30 / env)
+ES
+REST API for synchronous calls
+Rabbitmq for async calls
+
+
+### Engineering practices
+
+* 12 factor
+* Git commit as docker tag
+* Docker-compose and kubernetes
+* `develop` branch vs `master` branch
+
+* Shippable : SaaS unit testing and deployment
+* Tout tourne dans Kubernetes dans GKE
+* Gitflow
+* Quand ils testent le code en staging, ça va être un container qui sera le
+  même en prod
+
+"Worked fine in dev, oops ops problem now" :D
+
+* ~12 people in tech team
+* Devs in charge of their app up to production
+* Infrastructure team provides :
+    * tools
+    * guidelines
+    * expertise
+
+### Infra
+
+* Why GKE ?
+* Services chez GKE, opensource services => pas vendor locked
+
+* GKE Cluster => 15 nodes
+* ~280 pods
+* 200G B / 225GB of memory allocated
+* A evolué au fur et à mesure du temps
+* Cluster de 8 machines au début, qu'ils ont fait grandir jusqu'a 15 now
+
+=> Haute densité applicative => réduction de coûts
+
+Inside kubernetes :
+
+* All stateless applications for all envs
+* All stateful apps for integration environments (ES + rabbitmq dans des
+  containers dans kubernetes)
+
+Outside kubernetes :
+
+* stagin/production stateful app
+* infrastructure
+* spark (Pas dataspork (le truc de google pour avoir du spark))
+
+* GKE center cluster
+* uses services on standard instances
+
+Features used
+
+* namespaces to isolate environments
+* RC everywhere (even for single pods)
+* service discovery => plugin de SkyDNS
+* secrets => permet de monter un volume ephemere avec des fichiers sensibles
+  (certs SSL)
+* volumes => GKE permet de monter des disques/volumes persistants et de les
+  attacher à des pods
+* jobs => c'est juste une ressource dans kubernetes qui contrairement aux
+  replication controllers ont une durée de vie limitée, sont temporaires
+
+Tous les services ont le même nom dans les fichiers de conf, mais en pratique
+quand le front appelle "backend", il aura accès qu'au backend de son cluster !
+
+
+Avant Kubernetes 1, machine allouée aux Data scientists : souvent pas assez
+utilisée
+
+Avec migration à kubernetes => passage des calculs en jobs kubernetes !,
+utilisation optimale
+
+
+
+Metrics
+
+1 heapster (daemon by K community, get metrics from api server and push it to a
+data store) : google cloud monitoring sink (not used !)
+=> talks to influxdb
+1 heapster with an influxdb sing
+Telegraf :
+  * prometheus inputs for all nodes (permet de scrapper les infos facilement)
+  * custom python script to gather cluster wide metrics
+  * 1 telegraf instance running on each node
+1 pod peut parler à K et s'auth sur K facilement pour récupérer des infos, et
+faire des calculs pour aggréger les métriques et avoir de la visibilité sur
+l'ensemble du cluster
+
+InfluxDB 0.10.x + grafana
+
+
+=> voir l'occupation CPU + mem utilisée par des containers dans un namespace
+
+
+Loggin system
+
+1 fluentd per node to push to Google cloud logging (not used)
+200MB per node
+=> Deployed 1 logstash per machine (but 500MB RAM used :() 
+but advantages ! plugin K pour logstash qui permet de rajouter des metadats sur
+les logs (nom du namespace, du service, du pod, etc) => sans ces metadatas,
+impossible de différencier les logs de la prod de staging...
+
+Plusieurs process dans un même container : à la sortie du container, des logs
+entrelacés => toutes les apps doivent écrire leurs logs en json pour pouvoir
+rajouter des metadata + parser + filter/tag
+
+1 logstash per node to push to elasticsearch
+500 MB per node
+OOM pattern detection (ram limits are difficult to find) => logstash log
+systems et detection de patterns OOM
+
+
+Monitoring
+
+Auto healing cluster (lifeness probes, capacité de K de checker régulièrement
+les pods, et s'il y a un pb il le destroy + reschedule)
+Pods hooks + nagios + consol + consol-template => failed (hooks not always
+called, desync states between K and nagios, nagios same thing than lifeness
+probe, react too late => useless)
+Sentry
+Still need to decide push vs pull monitoring
+  * pull : prometheus
+  * push : kapacitor/watcher
+  * Google Cloud monitoring ?
+
+How to monitor Kubernetes events ?
+Sur un cluster de prod => plein d'events (rolling upgrade d'un service, pod qui
+vanish/repop, etc) => difficile de différencier les events qui sont normaux de
+ceux qui sont symptomatiques d'un problème en prod
+
+
+"The service here is Unbearable" :D
+
+Handul of issues :
+
+* Migraiton 1.0 -> 1.1 : dns discovery outage (#18171) (solved by switching to
+  iptables mode)
+* Loss of 1/3 of node cluster (...yesterday), Google network problem on EU zone
+  (#13346).
+* Load balancers de Google qui font pas de health check : pendant quelques
+  minutes les data sont toujours envoyées vers des kube morts
+* Volumes (#14642) => persistent volumes on a pod to store data... but. If the
+  pod gets killed, certaines race conditions => pods jamais reschedulé et pod
+  jamais reschedulé => le service repart pas sans intervention manuelle !
+  Probleme : on peut pas vraiment avoir de workflow vraiment stateful du coup
+* Memory pressure on nodes. Avant c'était à la main sur Docker sans limit. Mais
+  maintenant, le scheduler peut pas deviner la limite memoire sans qu'on lui
+  dise => oom, kills, etc
+
+
+A few painful points
+
+* Private services access outside cluster (#14545)
+* No public IP from public load balancers => loss of real clients IP
+* IAM (nothing neither on GKE nor on K)
+* Network isolation : rien n'empêche un pod de staging de se connecter à un pod
+  en prod
+* Kubectl exec (timeout / TERM) (#12179, #13585)
+* Node resizing on GKE (not possible to change instances)
+
+
+But a lot of joy !
+
+* Spawn a new env in a few minutes (to test a very large breaking change)
+  => copy every yaml (RCs + services), create -f, ggwp.
+* Super easy rolling-upgrade and rollback
+* Fully declarative infrastructure
+
+
+The future is bright
+
+* Ubernetes
+* ScheduledJob
+* Petset : new controller (ex NominalServices) => keep pods identity when they
+  are reschuled => deploy workloads with identity aderance easily
+* HPA on custom metrics !
+* Network policy
+
+Great community
+
+* Google-container ML
+* Slack (core team friendly)
+* Github (read the proposals !)
+* GKE support
+
+
+Conclusion
+
+* So much to do / discover / learn but really exciting
+* Docker evolutions are way less important for us than K new features
+* K is really a powerful abstraction and enable team autonomy andd velocity
+* Still a young project / ecosystem but evolving really quickly
+
+Prez on slideshare !
+
+
+## Questions
+
+Autres éventualités :
+
+* Nomad
+* Swarm
+* Mesos
+* Marathon
+
+K : pouvoir d'expression, peu de machines au début, pouvoir scaler loin
+
+# 3eme talk
+
+* Retour d'expérience Twistlock Security
+* par Michael Withrow and Dima Stropel @mwithrow
+
+## Abtract
+
+Retour d'expérience , cas clients en production sur une utilisation
+Kubernetes/Docker orchestré sur un cloud public Google ou privé et les écarts
+de sécurités inhérents qui existent et comment nous pouvons aider à les
+résoudre dans le cadre de déploiements de containers docker. Nous détailleront
+les notions d'accès control , la gestion de vulnérabilité et la sécurité
+active tout en respectant le cycle des devops et la continuité d'intégration. 
+
+## Content
+
+Twistlock
+Security, built for containers
+
+Customers : "lol security" => fix this
+
+* VUln management
+* Access control
+* Runtime defense
+
+### MARKETING TIME BOYS
+
+from the base layer, to app, frameworks, to your own code
+Plugins for Jenkins and TeamCity
+Any registry, anywhere
+Real time CVE stream service
+Detect and block both CVEs and hardening weaknesses (e.g CIS benchmark
+settings)
+Process (CI) perspective
+Proactively prevent vulnerable images from being deployed
+
+
+Access control :
+* Least privilege access to the Docker and K management plane
+* AD and Kerberos integration
+* Granular control down to the API
+* Trust control to ensure your hosts only run approved images
+
+END 21:08

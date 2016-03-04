@@ -1,0 +1,323 @@
+# Paris Monitoring #4
+
+* @ Le Bon Coin
+* Hashtag #parismonitoring
+
+# Présentation du meetup
+
+* 400 membres sur meetup.com
+* 3 meetups en 2015
+* Lancé / Animé / Organisé par SOMONE
+
+# Mot d'accueil du sponsor
+
+* Speach le plus inintéressant du moned
+* Pas de bière ?
+* Galères de setup du speaker
+
+# Talks
+
+## Industrialisation du monitoring chez Oxalide
+
+* Speaker : Jérémy Smadja
+* Sous Windows....
+
+* Présentation d'Oxalide
+
+### Historique
+
+* 2004 Scripting
+* 2005 Début Monitoring (Nagios, Cacti, scripts bash)
+* 2006 RTG
+* 2008 Centreon (Hosts / Services templates, indus, ticket mon)
+* 2015 CLAPI
+
+### Architecture Centreon
+
+* 21 pollers Centreon
+* 1h sur AWS pour créer un nouveau poller
+* 4703 hosts
+* 166447 services (tous en actifs, une 40aine par serveur)
+* 1318 Services templates
+* 415 Gb RRD siwe
+
+* Stack ELK (renommée Infrana chez Oxalide)
+* Observium + Grafana
+
+### Industrialisation
+
+* Chef
+* Why ? Plus de POC sur Chef et des retours négatifs sur Puppet (montées de
+  version, besoin de repasser derrière pour adapter la conf)
+* JSON -> Recipe Chef -> Actions -> Script bash -> CLAPI -> Centreon
+* Bastion SSH Chef -> Machine client Debian -> Proxy clapi CLAPI ->
+  Serveur Centreon
+
+? Chefistrano
+
+### Monitoring automatisé
+
+Win :
+
+* Admin plus rare
+* Autonomie de la prod
+* Moins de ticket monitoring
+* Uniformaisation du monitoring
+* Moins d'oublis
+
+Fail :
+
+* Production abêti : nouveaux moins au courant de ce qui se passe sur l'infra
+  et de comment c'est en place
+* Ticket monitoring plus complexe
+* Astreinte toujours pénible
+
+### Nouvelles tendances
+
+* On premise vs Cloud public
+* Autoscaling (AWS)
+* Docker
+* DevOPS
+
+### Smart monitoring
+
+3 types de monitoring :
+
+* Systeme
+* Métrologie (Capacity planning, prévisions, etc)
+* Business client
+
+Smart monitoring côté business :
+
+* Déterminer le bon fonctionnement de l'app
+  * Délais de réponse ?
+  * COmmandes qui fonctionnent ?
+  * Audience minimum toujours présente ?
+  * Intervention immédiate nécessaire ? Y'a 4 fronts, 1 tombe, est-ce que c'est
+    nécessaire de wake up un mec d'astreinte pour ça ?
+  * Ouais ça load et alors ? => Problème compliqué, le load veut dire plein de
+    choses et peut être correlé avec plein de trucs (ex: temps de réponse <=>
+    nombre d'users sur le site). Load peut être positif : de plus en plus élevé
+    ? Business cool, c'est pas forcément l'app qui se dégrade
+    => Mettre les sondes en lien !
+  * Monitoring saisonnier : période de soldes
+
+Lâcher prise sur les anciennes sondes : RAM, inodes, etc. Augmenter les seuils,
+supprimer l'alerting. Ex : a Oxalide, plus d'alterting sur le load à 1min (pour
+rien, au final c'est qu'un petit pic) et commence à 5min
+
+Réfléchir aux métriques pertinentes :
+
+* Temps de réponse du site Internet (révèle le bon fonctionnement du business,
+  selon l'app ofc) => Check HTTP
+* Bon fonctionnement du processus d'achat => Cucumber, CasperJS, Selenium.
+  Partenariat plus serré entre le dev et l'ops
+* Temps de traitement d'un batch. Plus complexe à trouver. Ex : quand ma vidéo
+  va rentrer dans le process d'encodage, est-ce que c'est assez rapide ?
+* Espace disque !
+
+### Next step; résumé des besoins
+
+* Config dynamique
+* Scalable
+* Granularité plus fine (ex pour les TMC)
+* Modularité des composants
+* Système d'alterting intelligent
+
+### Next step; monde idéal
+
+* Middle : Time-series databases
+* Top : UI (Graphs, stats, reporting, dashboard, etc)
+* Bottom : external monitoring system (récup un système de monitoring tier et
+  l'intégrer)
+* Right : altering system puis notifs (chat, SMS, email, pagerduty)
+* Left : agent, clients
+
+
+### next step; databases
+
+* InfluxDB
+* Elasticsearch
+
+Altering :
+
+* Kapacitor
+* Riemann
+* influxdata
+
+UI :
+
+* Status (centreon)
+* Grafana
+* Pronographe ?
+
+Agents :
+
+* Telegraf (push l'info à la TSDB)
+* Logstash
+* Prometheus
+
+External monitoring system :
+
+* New relic
+* ?
+
+Existant/migration :
+
+* Architectures modulaires => agilité
+
+
+### Misc
+
+* Reload de Centreon toutes les heures
+* Evolution Centreon 3 => Migration des 415G de RRD vers influxDB ?
+
+## Evolution de la supervision chez Ikoula
+
+* Speaker : Nicolas Trauwaen
+* QUelles sont les réponses apportées aux contraintes de volumétrie et de
+  performance ?
+
+### Ikoula
+
+* Créé en 1998
+* 47 employés
+* 8 000 OS en prod
+* 2 DC en France + 4 dans le monde
+* 5k serveurs physiques
+
+### Historique
+
+* Mutualisé
+* Collocation (on amène le matos dans une baie)
+* Dédiés
+* Offres prépackagées
+* Premier DC à Reims en 2006 (1750m²)
+* Diversification
+* Cloud public en 2008 (on parlait de virtu seulement à l'époque)
+* Primés en 2010 par Microsoft au niveau mondial (coucou Hyper-V)
+* 2013 : cloudstack + xen
+
+### Fping + rsyslog + escalade par mail
+
+### Servers alive
+
+Avantages :
+
+* Ping
+* Test des ports en écoute en TCP
+* Pas besoin d'agent ni de conf locale ! (les clients n'aiment pas , et niveau
+  update des confs c'est pa top)
+* Serveur central + dashboard
+
+Inconvénients :
+
+* Inventory manuel
+* Obligation de stop/start à chaque maj de l'inv
+* Pas de redondance du service de supervision
+
+### Automatisation de l'inventaire
+
+SAlive : galère
+
+Nagios :
+
+* Opensource
+* modulable
+* gestion dynamique d'inv
+* processus cgi mono thread
+* peu réactif !
+* Dev nécessaire pour improve les perfs
+
+Zabbix :
+
+* Opensource
+* modulable
+* gestion dynamique d'inv
+* process php multithread
+* Meilleures perfs
+* Grande réacivité
+* Solution nouvelle et peu connue : gros pari
+
+=> utilisation de templates
+
+Les templates c'est bien MAIS :
+
+* Tout modéliser est impossible
+* Multiplication des sondes "inutiles" avec des templates à large spectre
+* Tous les clients ont des trucs différents même si c'est tous un site web par
+  exempe
+* Attention au "il vaut mieux trop que trop peu" => trouver l'équilibre. Trop
+  de sondes = trop d'alertes, trop de data, etc
+* Trouver l'équilibre entre modèle et personnalisation
+
+Utilisation d'agents :
+
+* Sondes systèmes built-in dans l'agent : rien à redéfinir ou scripter !
+* User parameters : définir des cli spécifiques ou des appels à des scripts que
+  le built in ne gère pas
+* Agent en mode passif, ne consomme que très peu de ressources quand pas
+  contacté par le serveur
+* Si le serveur ne répond pas, le client garde les infos et les synchros plus
+  tard
+
+mais :
+
+* gestion des confs personnalisées (mince j'ai mis à jour celui là mais pas
+  l'autre")
+* Risque d'information disclosure avec les userparameters (password mysql dans
+  les fichiers de conf, etc)
+* Agents passifs => le serveur fait tout => charge et attention aux firewalls
+  en face !
+
+### Eclatement de l'infra
+
+* Avant : Passer de DB + Zabbix + dashboard
+* Après : DB redondée + moteur zabbix central + dashboard + proxy zabbix
+
+Optimisation des DB !
+
+* Analyse des slow queries
+* Ajout d'index ur les tables les plus consultées
+* Passage des tables temporaires en RAMDISK
+* Optimisations InnoDB
+
+### Zabbix 2(.2)
+
+* Autodiscovery des ressources locales
+* Utilisation de macros
+* Possibilité de placer les personnalisations en base (scripts, commandes, etc)
+* Passage des agents en mode actif => allègement de la charge du master, plus
+  besoin d'ouvrir des ports spécifiques en entrée
+* Modélisation des webscénarii (Plesk)
+* API zabbix
+
+Optis DB :
+
+* Utilisation de XtraDB mais pas en mode cluster ! problèmes de lock quand
+  c'est sur plusieurs noeuds
+* Partitionnement des tables d'historique pour pouvoir archiver les valeurs
+  les plus anciennes => mettre de côté un processus de Zabbix (housekeeper) qui
+  est génial mais galère sur des gros volumes (les DELETE, ça charge !)
+
+### Evolutions
+
+* Autodiscovery des instandes dans du cloud (public ou privé)
+* Meilleure intégration de la sup des OS "dockerisés" (CoreOS, RancherOS)
+* Supervision des ressources par conteneur (cadvisor like)
+* ANalyse prédictive des comportements
+
+* Pareil qu'Oxalide : monitorer ce qui importe au business (coucou on a du LB
+  et plein de failover, est-ce qu'on s'en tape pas si un front tombe ?)
+
+### Links
+
+ikoula-blog.com
+fr.ikoula.wiki
+github ikoula
+
+# Annonces de la communauté
+
+# Repas / Networking
+
+
