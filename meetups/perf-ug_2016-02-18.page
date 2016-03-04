@@ -1,0 +1,290 @@
+# REX Algolia
+
+Highly distributed & available search API on bare metal
+
+* perf
+* world dispo
+* pertinence
+
+< 10ms en moyenne
+
+1200+ customers (100+ countries)
+40B+ Write ops per month
+11B+ user generated queries / month
+
+15 regions; 36 DC
+
+ES/solar => les 2 basés sur Lucene... perfs :/
+
+Constraints :
+
+* High volume of R/W ops
+* HA
+* Worldwide data distribution
+
+=> compromises !
+
+# Software stack
+
+Offline SDK à la base : small, embedded on mobile apps
+Indexing & search offline
+Running on the cheapest android
+
+Full C++ engine
+custom datastructures
+almost no dependencies (google sparsehash (hashtables), yajl (json parser),
+hiredis (redis client)
+
+
+deployed as an nginx module (déjà perf !)
+as close as possible to the http request
+no reverse proxy
+builtin hot reload (nginx reload, restart automatique quand le bin change; etc)
+far from C10k (capacité d'un serveur web de servir 10k requetes par seconde; la
+conf de base d'nginx en est loin et est capée à 1024)
+
+=> perdre le moins de temps possible
+
+A la base, tourne sur de l'Ubuntu
+* timeout
+* drop des paquets
+=> mal conf
+
+
+Search vs indexing
+Search : read only, CPU & ram, more priority
+Indexing : r&w, cpu+ram+disk, msut not impact search performances
+2 processes
+notion de priorité
+
+Search : module nginx (forward dans une queue si on lui file une req
+d'indexation)
+Indexation : process séparé
+
+2 settings principaux :
+* fonction de re-nicing des process => priorité au search
+* SSDs : les distros sont pas designées pour tourner sur du SSD
+conf kernel, scheduling des IOs, etc fait pour des HDD standard
+
+Changé le scheduler d'IO du kernel => deadline policy : va autoriser que l'IO
+ne soit pas vraiment faite jusqu'à une certaine deadline, après c'est la merde
+et il write quand même
+
+Read : max 100ms
+Write : max 10s
+
+
+
+Cluster of 3 machines : n'importe quel cluster tourne sur 3 machines identiques
+en master/master : process de search + indexation, savent toutes tout faire
+Elles sont uniquement 3 pour une question de fault tolerance, la data n'est
+**PAS** partitionnée, mais répliquée !
+
+Distributed consensus (RAFT)
+NO load balancer :
+ * Smart API clients
+ * APP_ID.algolia.net
+ * APP_ID-{1,2,3].algolia.net
+
+ Zookeeper ? Super distribution, etc... mais un process à part.
+ => rajoute de la complexité, en plus du coup les process doivent communiquer
+ avec lui (perfs !)
+Timeouts trop bas => java => gc => delay => si timeout trop bas la machine sort
+du pool alors que t'étais juste en train de gc o/
+
+Ce process sera à l'intérieur du process de build (RAFT) : les 3 machines
+doivent se mettre d'accord pour assigner l'ordre de processing.
+ADD/DELETE recu : ils faut que les 2 autres machines le fassent dans le même
+ordre sinon c'est la merde. "Hey les 2 autres nodes, faites ça ok ?"
+
+La logique de load balancing est donc dans la logique des clients de l'API
+
+
+
+
+Distributed search network
+
+World wide replication
+NOT a cache
+Geo-IP based routing
+EDNS is a plus ! => real GeoIP, not the router/FAI geoloc
+Provider : NS1
+Users target the closest datacenter hosting their data
++45 probes arounds the world calibrating/monitoring it
+
+
+DNS redundancy :
+
+DNS providers are also failing
+2 DNS providers :
+  *.algolia.net
+  *.algolianet.com
+TLD tips: .io is a bad idea : 7 root DNS (.com/.net root DNS : env. 100)
+En asie : root server .io overloadé => requests lentes à cause de la résolution
+DNS :D
+
+
+
+Hardware Stack
+
+Cloud vs Bare Metal
+
+High end CPU
+* Fast CPU
+* At least 3.5GHz
+* Only 8 or 12 threads (a single processing unit is single threaded anyway)
+* Best models : Intel E5-1650v2/3
+
+Processeurs fait pour les machines de "cloud" : spawn plein de process ruby pas
+perf
+Une grosse partie du process d'un query est single threadé => autant que les
+threads soient efficaces. On perdrait plus de temps à fork + remerger plutôt
+que de faire comme ça
+
+Testé une bonne 10aine de CPUs pour trouver au final celle qu'ils voulaient
+
+High end RAM
+* 64 oR 128GB
+* ECC, 1600 or 2400 Mhz
+* Indices are in memory
+=> au moins sur du baremetal on sait ce qu'on pourra taper
+"On est pas les seuls à faire ça, Google a plusieurs fois tout le web en RAM"
+<3
+
+
+High end SSDs
+* SSD in Raid-0
+* Techno sur le marché pas encore prête à ce qu'Algolia veut en faire
+* Beaucoup de précompute et 10TB d'écriture par machine !
+* 400GB to 1.5TB
+* Heavyweight I/O operations
+* Cramé la plupart des SSDs du marché
+* Un SSD a une durée de vie de quelques 100aines de PB de writes
+* Burned a bunch of them
+* Best models : Intel S3700, S3710 (avant, des S3500, durée de vie de 3 mois,
+  le provider se disait "wtf")
+* "Au fur et à mesure on aura des perfs de moins en moins bonnes avec l'usage"
+  => non ! c'est d'un coup en quelques minutes que ça se dégrade
+* Problème : 3 machines. Identiques. Qui font la même chose. EPIC :D
+* mmap FTW
+
+Passés par Samsung... perfs plutôt correctes, mais de temps en temps, grosse
+grosse corruption : d'un coup, tout un bloc à 0 sur une partie du disque
+BLog post au sujet => plein d'A/R avec samsung.
+Au final, le bug était pa sdans le SSD mais dnas le kernel Linux : Raid 0 +
+trim, le firmware pouvait pas être d'accord avec le kernel, le kernel s'en
+tapait et forcait l'écriture à 0
+trim : dire au disque "ok, ces blocs là sont pas utilisés"
+Quick fix : samsung = disable trim
+Long term fix : buy intel
+
+Raid 0 : pas habituel, mais on s'en cogne, y'a 2 machines identiques !
+
+Intérêt du SSD : indexes built on disk avant d'être remontés en RAM
+
+Le speaker est cool, il répète les questions o/
+
+Si c'est mutualisé, c'est le kernel qui gère et du coup s'ils assignent un
+cluster à un client, ils forcent le kernel a pas foutre les index en RAM (au
+moment du precompute ?)
+
+
+
+Network
+
+Machines spread in 15 regions
+* 36 DC
+* +400 machines
+* 11 network providers (!)
+* Best practice: 2 or 3 providers setup
+
+2/3 machines dans le même rack : si le switch du rack meurt, bah tu perds ton
+cluster !
+Chaque cluster est sur au moins 2 providers, 3 si le client paye
+
+=> pas de client dont l'index ne tient pas sur 1 machine. Forte contrainte au
+client là dessus
+Atm y'a très peu de usecases où on veut fournir une barre de recherche sur des
+data qui tiendra pas sur une machines
+Dailymotion, Linkedin etc ça tient sans soucis (ok fb maybe not)
+Export Wikipedia : 60GB de data => 150GB de RAM environ
+
+
+
+PRICING
+
+1k2/1k7$ par machine par an(mois ?) sur du i4 mx large
+
+Princing chez inel/ovh/etc : dédiés à 200€ / mois
+
+Now ils ne font que louer les slots dans les DC et ont leur baie et leurs
+serveurs de Supermicro dedans
+
+=> Buy buy provisioning APIs
+... welcome java & windows based applet/KVM
+
+=> but bye bye instant delivery
+... welcome 2 months shipment (Sao paolo, new deli, etc)
+... and customs taxes
+Brésil : tout matériel importé au Brésil est automatiquement bloqué à la douane
+pour une taxe de 50%
+
+bye bye 2016-ready global providers and welcome local providers (monnaies
+locales, communication, etc...)
+
+
+Très bon devops qui a automatisé tout ça et reviendra en parler en avril !
+GOOOOOOOOOOO
+
+
+sylvain@algolia.com
+@sylvainutard
+
+
+SLA : "l'indexation a pris en compte", mais pas sur les temps de réponse
+Optim de l'index (solar/ES optimize, cloud view et exalead = compact, algolia =
+merge)
+du coup meme insert un jour ou un autre ca peut être 100ms comme 10min
+mais ce que les clients veulent c'eest une recherche rapide, l'insert peu
+importe vu que dans tous les cas la majorité reste fait dans la seconde
+
+Question sur le cache des CPUs
+=> probleme de dispo, ça doit êtr edispo chez les 11 providers partout
+
+"Tout ce qui est eco dans le bios on désactive"
+
+Les SSDs font partie du forfait et ne sont pas facturés. OVH a commencé à poser
+des question quand ils cramaient vite, et il y a vraiment eu une vraie
+discussion en interne sur comment upgrader et améliorer les choses
+
+Brésil : pour des raisons de cout, le provider voulait vraiment pas les filer,
+ils en ont filé des moins bien, 2 sem plus tard c'était cramé
+
+
+metriques : nombre d'objets indexables, et nombre d'operations faisables sur
+les objets
+derriere les API key y'a du rate limit
+En gros, les API keys sont *vraiment* configurables
+
+thread d'indexation limité par APP_ID : jamais plus d'1 thread d'indexation
+pour 1 client
+
+Assez rare qu'ils soient sur des clusters mutualisés en manque de cPU pour
+mutualiser les recherches : anticipation
+
+Cluster "enterprise" : client tout seul sur 1 cluster et la limite de 1 thread
+par APPID saute
+
+
+COmbien de personnes pour gérer tout ça ? 2 depuis 2 mois : 1 CTO + 1 Devop, +
+1 today
+
+4 à faire de l'astreinte
+
+Monitoring : eux même; parce que le brésil soit pas accessible depuis
+l'australie en s'en fous. Du coup leur infra de monitoring a une très grande
+relation de notion entre les probes
+Pagerduty
+
+
+y'a 1 an ils étaient 12? now 44
