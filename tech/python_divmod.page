@@ -1,0 +1,39 @@
+Today, I'm fighting with python's standard library. And, more precisely, the
+`divmod` behavior !
+
+As stated in the [official divmod
+documention](https://docs.python.org/3.3/library/functions.html#divmod):
+
+> Take two (non complex) numbers as arguments and return a pair of numbers
+> consisting of their quotient and remainder when using integer division.  With
+> mixed operand types, the rules for binary arithmetic operators apply.  For
+> integers, the result is the same as `(a // b, a % b)`. For floating point
+> numbers the result is `(q, a % b)`, where *q* is usually `math.floor(a / b)`
+> but may be 1 less than that.  In any case `q * b + a % b` is very close to
+> *a*, if `a % b` is non-zero it has the same sign as *b*, and `0 <= abs(a % b)
+> < abs(b)`.
+
+The interesting part being this one :
+
+> For floating point numbers the result is `(q, a % b)`, where *q* is usually
+> `math.floor(a / b)`
+
+I'm kind of surprised to find something defined as "usually" in what should be
+on of the most consistent things provided. And indeed:
+
+```python
+$ python
+Python 3.5.1 (default, Dec  7 2015, 12:58:09)
+[GCC 5.2.0] on linux
+>>> a, b = divmod(42.1337, 5)   # divmod
+>>> type(a)
+<class 'float'>                 # Wait... shouldn't it be an int ?
+>>> a
+8.0
+>>> type(math.floor(a))
+<class 'int'>                   # And indeed, if math.floor got called...
+```
+
+So, here I am, being a bit decieved by such a behavior, and thus not calling
+`divmod`. I'll check the sources of the official implementation and update this
+page accordingly!
