@@ -1,3 +1,5 @@
+# Initial WTF
+
 Today, I'm fighting with python's standard library. And, more precisely, the
 `divmod` behavior !
 
@@ -15,8 +17,8 @@ documention](https://docs.python.org/3.3/library/functions.html#divmod):
 
 The interesting part being this one :
 
-> For floating point numbers the result is `(q, a % b)`, where *q* is usually
-> `math.floor(a / b)`
+> **For floating point numbers the result is `(q, a % b)`, where *q* is usually
+> `math.floor(a / b)`**
 
 I'm kind of surprised to find something defined as "usually" in what should be
 on of the most consistent things provided. And indeed:
@@ -38,3 +40,135 @@ Python 3.5.1 (default, Dec  7 2015, 12:58:09)
 So, here I am, being a bit decieved by such a behavior, and thus not calling
 `divmod`. I'll check the sources of the official implementation and update this
 page accordingly!
+
+# On `divmod` implementation
+
+As said above, I finally checked the sources directly. I worked on [the source
+code of Python 3.5.1](https://www.python.org/downloads/release/python-351/),
+more precisely the [Python-3.5.1.tar.xz tarball found
+here](https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz).
+
+From `Python-3.5.1/Lib/_pydecimal.py`:
+
+```python
+def divmod(self, a, b):
+    """Return (a // b, a % b).
+
+    >>> ExtendedContext.divmod(Decimal(8), Decimal(3))
+    (Decimal('2'), Decimal('2'))
+    >>> ExtendedContext.divmod(Decimal(8), Decimal(4))
+    (Decimal('2'), Decimal('0'))
+    >>> ExtendedContext.divmod(8, 4)
+    (Decimal('2'), Decimal('0'))
+    >>> ExtendedContext.divmod(Decimal(8), 4)
+    (Decimal('2'), Decimal('0'))
+    >>> ExtendedContext.divmod(8, Decimal(4))
+    (Decimal('2'), Decimal('0'))
+    """
+    a = _convert_other(a, raiseit=True)
+    r = a.__divmod__(b, context=self)
+    if r is NotImplemented:
+        raise TypeError("Unable to convert %s to Decimal" % b)
+    else:
+        return r
+```
+
+Which we could summarize like this (for the part which interests us) :
+
+```python
+r = a.__divmod__(b, context=self)
+return r
+```
+
+Still from `Python-3.5.1/Lib/_pydecimal.py`, `__divmod__` implementation :
+
+```python
+def __divmod__(self, other, context=None):
+    """
+    Return (self // other, self % other)
+    """
+    other = _convert_other(other)
+    if other is NotImplemented:
+        return other
+
+    if context is None:
+        context = getcontext()
+
+    ans = self._check_nans(other, context)
+    if ans:
+        return (ans, ans)
+
+    sign = self._sign ^ other._sign
+    if self._isinfinity():
+        if other._isinfinity():
+            ans = context._raise_error(InvalidOperation, 'divmod(INF, INF)')
+            return ans, ans
+        else:
+            return (_SignedInfinity[sign],
+                    context._raise_error(InvalidOperation, 'INF % x'))
+
+    if not other:
+        if not self:
+            ans = context._raise_error(DivisionUndefined, 'divmod(0, 0)')
+            return ans, ans
+        else:
+            return (context._raise_error(DivisionByZero, 'x // 0', sign),
+                    context._raise_error(InvalidOperation, 'x % 0'))
+
+    quotient, remainder = self._divide(other, context)
+    remainder = remainder._fix(context)
+    return quotient, remainder
+```
+
+Still summarizable as :
+
+```python
+quotient, remainder = self._divide(other, context)
+remainder = remainder._fix(context)
+return quotient, remainder
+```
+
+The `_fix` has no impact on our problem since it's applied to the remainder and
+not to the quotient.
+
+So, going down the path, here is `_divide`:
+
+```python
+def _divide(self, other, context):
+        """Return (self // other, self % other), to context.prec precision.
+
+        Assumes that neither self nor other is a NaN, that self is not
+        infinite and that other is nonzero.
+        """
+        sign = self._sign ^ other._sign
+        if other._isinfinity():
+            ideal_exp = self._exp
+        else:
+            ideal_exp = min(self._exp, other._exp)
+
+        expdiff = self.adjusted() - other.adjusted()
+        if not self or other._isinfinity() or expdiff <= -2:
+            return (_dec_from_triple(sign, '0', 0),
+                    self._rescale(ideal_exp, context.rounding))
+        if expdiff <= context.prec:
+            op1 = _WorkRep(self)
+            op2 = _WorkRep(other)
+            if op1.exp >= op2.exp:
+                op1.int *= 10**(op1.exp - op2.exp)
+            else:
+                op2.int *= 10**(op2.exp - op1.exp)
+            q, r = divmod(op1.int, op2.int)
+            if q < 10**context.prec:
+                return (_dec_from_triple(sign, str(q), 0),
+                        _dec_from_triple(self._sign, str(r), ideal_exp))
+
+        # Here the quotient is too large to be representable
+        ans = context._raise_error(DivisionImpossible,
+                                   'quotient too large in //, % or divmod')
+        return ans, ans
+```
+
+Nothing here too, which seems to confirm that there is no floor in divmod. I
+still have to check about the `context` before affirming anything and
+suggesting a fix (may it be to the documentation or to the divmod
+implementation).
