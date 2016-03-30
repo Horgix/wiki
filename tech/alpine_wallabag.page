@@ -35,3 +35,11 @@ writing) :
 
 The APKGBUILD used to build the php package on Alpine Linux is
 [here](http://git.alpinelinux.org/cgit/aports/tree/main/php/APKBUILD)
+
+# Misc links
+
+* [PHP APKBUILD](http://git.alpinelinux.org/cgit/aports/tree/main/php/APKBUILD)
+* [Wallabag](https://www.wallabag.org/)
+* [Wallabag documentation (v2)](http://doc.wallabag.org/en/v2/index.html)
+* [Wallabag requirements + installation
+  instructions](http://doc.wallabag.org/en/v2/user/installation.html#requirements)
