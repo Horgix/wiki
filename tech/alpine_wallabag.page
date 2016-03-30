@@ -43,3 +43,4 @@ The APKGBUILD used to build the php package on Alpine Linux is
 * [Wallabag documentation (v2)](http://doc.wallabag.org/en/v2/index.html)
 * [Wallabag requirements + installation
   instructions](http://doc.wallabag.org/en/v2/user/installation.html#requirements)
+* [Wallabag in docker doc](http://doc.wallabag.org/en/v2/developer/docker.html)
