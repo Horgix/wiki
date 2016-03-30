@@ -25,12 +25,13 @@ on of the most consistent things provided. And indeed:
 $ python
 Python 3.5.1 (default, Dec  7 2015, 12:58:09)
 [GCC 5.2.0] on linux
->>> a, b = divmod(42.1337, 5)   # divmod
->>> type(a)
+>>> import math
+>>> q, r = divmod(42.1337, 5)   # divmod
+>>> type(q)
 <class 'float'>                 # Wait... shouldn't it be an int ?
->>> a
+>>> q
 8.0
->>> type(math.floor(a))
+>>> type(math.floor(q))
 <class 'int'>                   # And indeed, if math.floor got called...
 ```
 
