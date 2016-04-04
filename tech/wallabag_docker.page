@@ -1,0 +1,141 @@
+---
+title: Wallabag on Docker
+...
+
+# With php:apache
+
+## Requirements
+
+From the [installation requirements of
+Wallabag](http://doc.wallabag.org/en/v2/user/installation.html#requirements),
+the following PHP (\**sigh*\*) extensions are required (php >= 5.5 at time of
+writing) :
+
+Among the dependencies, the following are already present in the `php:apache`
+docker image :
+
+* php-session
+* php-ctype
+* php-dom
+* php-hash
+* php-simplexml
+* php-json
+* php-xml
+* php-iconv
+* php-curl
+* php-tokenizer
+
+Wallabag uses PDO to connect to database, so one of the following is needed
+The following have to be added in the Dockerfile :
+
+* php-gd : requires libpng12-dev libjpeg-dev
+* php-tidy : requires libtidy-dev
+* php-mbstring
+* php-gettext
+
+Plus the database pdo module :
+
+* php-pdo_pgsql
+
+## Installation
+
+http://doc.wallabag.org/en/v2/user/installation.html#installation
+
+Well, here lays the principal problem.
+
+Official directives :
+
+```
+git clone https://github.com/wallabag/wallabag.git
+cd wallabag
+git checkout 2.0.0
+SYMFONY_ENV=prod composer install --no-dev -o --prefer-dist
+php bin/console wallabag:install --env=prod
+```
+
+I'm fine with the git clone or ADD/wget the release, whatever.
+
+But the composer part is kinda not working with the Docker philosophy.
+
+from
+[composer.json](https://raw.githubusercontent.com/wallabag/wallabag/v2/composer.json)
+:
+
+```
+"scripts": {
+    "build-parameters": [
+        "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+    ],
+    "post-cmd": [
+        "@build-parameters",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+        "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+    ],
+    "post-install-cmd": [
+        "@post-cmd"
+    ],
+    "post-update-cmd": [
+        "@post-cmd"
+    ]
+},
+```
+
+Which causes the next problem :
+
+```
+> Incenteev\ParameterHandler\ScriptHandler::buildParameters
+Updating the "app/config/parameters.yml" file
+> Sensio\Bundle\DistributionBundle\Composer\ScriptHandler::buildBootstrap
+> Sensio\Bundle\DistributionBundle\Composer\ScriptHandler::clearCache
+
+  [Doctrine\DBAL\Exception\ConnectionException]
+  An exception occured in driver: SQLSTATE[08006] [7] could not translate host name "postgres" to address: Name or service not known
+
+  [Doctrine\DBAL\Driver\PDOException]
+  SQLSTATE[08006] [7] could not translate host name "postgres" to address: Name or service not known
+
+  [PDOException]
+  SQLSTATE[08006] [7] could not translate host name "postgres" to address: Name or service not known
+
+Script Sensio\Bundle\DistributionBundle\Composer\ScriptHandler::clearCache handling the post-cmd event terminated with an exception
+
+  [RuntimeException]
+  An error occurred when executing the "'cache:clear --no-warmup'" command:
+
+    [Doctrine\DBAL\Exception\ConnectionException]
+    An exception occured in driver: SQLSTATE[08006] [7] could not translate host name "postgres" to address: Name or service not known
+
+    [Doctrine\DBAL\Driver\PDOException]
+    SQLSTATE[08006] [7] could not translate host name "postgres" to address: Name or service not known
+
+    [PDOException]
+    SQLSTATE[08006] [7] could not translate host name "postgres" to address: Name or service not known
+
+install [--prefer-source] [--prefer-dist] [--dry-run] [--dev] [--no-dev] [--no-plugins] [--no-custom-installers] [--no-autoloader] [--no-scripts] [--no-progress] [-v|vv|vvv|--verbose] [-o|--optimize-autoloader] [-a|--classmap-authoritative] [--ignore-platform-reqs] [--] [<packages>]...
+
+The command '/bin/sh -c SYMFONY_ENV=prod php composer.phar install --no-dev -o --prefer-dist' returned a non-zero code: 1
+```
+
+Indeed, it obviously fails since the `clearCache` step tries to connect to the
+database, which is unavailable at **build time**.
+
+
+## Apache
+
+http://doc.wallabag.org/en/v2/user/installation.html#installing-on-apache
+
+No problem here :)
+
+Just give the provided configuration to the apache already existing in the
+`php:apache` image, and you're good to go !
+
+# Misc links
+
+* [Wallabag](https://www.wallabag.org/)
+* [Wallabag documentation (v2)](http://doc.wallabag.org/en/v2/index.html)
+* [Wallabag requirements + installation
+  instructions](http://doc.wallabag.org/en/v2/user/installation.html)
+* [Wallabag in docker doc](http://doc.wallabag.org/en/v2/developer/docker.html)
