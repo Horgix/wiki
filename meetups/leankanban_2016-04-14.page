@@ -1,0 +1,353 @@
+# Intro
+
+Conférences : 29 et 30 novembre 2016
+
+* Jim Benson
+* Henrik Kniberg
+* Gojko Adzic
+
+* Alan Kelly
+* Alberto Brandolini
+* Pierre Pezziardi
+Loi de conway
+
+* Andrea Provaglio
+* Clarke Ching (théorie des contraintes)
+* Ramon Guiu (comment gérer la partie product management)
+
+leankanban.fr
+
+21 juin 2016
+La Product Conference
+
+* Frédérique Dame
+* Alexandre Brun (bots Messenger)
+
+# Prez Xebia
+
+Tech trends
+
+# 1er talk
+
+2015
+Transformation Société Générale
+
+Yannick ???
+S'occupe de l'équipe de dev, outils front office
+Transformation lancée en 2015
+
+GLFI : Global Finance
+
+The GBIS IT Department
+
+* Outils de collaboration
+* Beaucoup de compute
+
+## WHy
+
+And why now ?
+
+* Nombreuses crises
+* Il faut, pour une fois, être préparé
+* Gagner des parts de marcher
+* Gagner plus de deals en moins de temps
+
+Pour faire ça, axes d'amélio :
+
+* Meilleure SI
+* Applications monolithiques lentes, peu évolutives
+* Need a better system
+* Build a new and modern system
+* SHould be agile to adapt
+
+Et là le CTO débarque et... "on remplace les applis legacy", "on va partir sur
+du SOE, du CD, etc"
+
+"Crazy people... crazy people Everywhere" o/
+Tout changer, en même temps !
+
+* A new technical stack
+* + new skills required
+* + a complex platforme
+* + adaptibilité et scalabilité
+
+=> Go go feature teams !
+
+### Comment le changement s'est opéré ?
+
+Before :
+
+* App 1 : BAs, TLs/Dev, PMs, ...
+* App 2 : BAs, TLs/Dev, PMs, ...
+
+Added :
+
+* New tech experts
+* UX Designers
+* Testers
+* All "craftmen"
+* Coach
+* Au dessus de tout ça : Chief Product Owner, côté métier, qui source ces
+  équipes là
+
+Ce que ça donne à la fin :
+
+* Features teams avec PM + PO + UX + QA + 1 TL (ex project manager) + 4 devs
+
+Feature team : équipe qui s'engage à deliver des fonctionnalités. Peu toucher
+plusieurs applis (front, back, webservices à côté, etc.) !
+
+PM vs PO :
+
+* Société Générale, notion de hiérarchie...
+* PM : premier niveau hierarchique, interface avec les métiers IT et les
+  clients (problématiques de reporting, métier, etc)
+* Pas de rôle identifié de scrum master. Le TL prend potentiellement certaines
+  de ces attributions
+
+"C'est pas très corporate ce que je vais dire..."
+"On a laissé les devs offshore de côté pendant qu'on faisait notre
+transformation en leur confiant des trucs legacy sur nos applications pendant 8
+mois / 1 an"
+"Essayé d'embarquer 2-3 devs offshore dans les feature teams, sans trop de
+résultat. Pas les mêmes profils, ne peuvent pas attaquer les mêmes sujets,
+doivent bosser sur des sujets pas trop risqués. C'est une team comme une autre,
+juste avec des attributions différentes"
+
+Transformation elle même faite dans la démarche agile, itérative
+
+Niveau "shaking", changement de comment ça marche : très bien recu. Le fait que
+ça avait du sens, que c'était dynamique, sur des technos nouvelles (facteur de
+motivation)... les gens acceptent un changement sur leurs pratiques et
+attributions
+Mais toujours "dommages collatéreaux" sur certains
+Supportés par le management, changements poussés par la DSI au sens large et
+par les client. Pas de frein RH ou administratif => gros facteur de motivation
+pour Xebia !
+
+Au début : 3 features teams
+
+Craftmanship : valeur super importante
+Comparaison sur des isparans
+
+Faire de la qualité !
+Comment ? Il faut des compétences, s'entrainer, etc
+=> Katas de code
+"Aujourd'hui, un développeur il joue que des matchs"
+Investissement. Ralentissement au début (doit être pris en compte lors de la
+planification, on mise sur l'avenir)
+Clean code, TDD
+
+
+
+A scalable model ! How did we grow ?
+
+Selection Process Changed
+* Demande : extreme
+* Mindset
+* Change vraiment la façon dont on discute avec son équipe
+* Recrutement en interne + prestas
+* Filtre. Type d'entretien : katas, coder, et coder avec l'équipe (quel type de
+  code il fait, quels pratiques, etc). + Filtre team
+* Recrutements dev plus techno driven, plus côté mindset
+* Culture, cercle vertueux
+* "Est ce que ce candidat apportera quelque chose à cette culture ?"
+* Fizzbuzz...
+* Si accepté lors de l'entretien par l'équipe, le "on boarding" se fait mieux
+  et plus rapidement
+
+
+Scalability - How to grow ?
+
+* Add team members to 1 team...
+* ... until we can split into 2
+* Séparation des teams un peu compliquée. Poper une deuxieme team à côté :
+  tester, et nope; pas assez de partage, etc
+* How to split : mindsets, skills, etc
+
+"Pizza team" x)
+
+How : 6 teams
+
+
+
+
+
+Need to act as one to deliver !
+Galère... Pas de "devops", du coup c'est galère de tout packager pour les ops
+
+We use the same framework
+Srpints de 3 semaines
+Sprints plannings et démos au même moment, cross teams, etc
+
+
+Product backlog => Sprint planning meeting => Sprint backlog => 3 week sprint
+(sprint end date and team deliverable do not change) => Daily stand up meeting
++ sprint review + finished work + sprint retrospective
+Definition of Done commune à toutes les teams
+Boards cohérents avec les mêmes colonnes, mêmes rythmes, etc
+
+
+
+Setup release trains
+Au sens Spotify
+"J'ai des trains qui partent pour la prod, à chaque équipe d'inscrire ses
+features à un train"
+
+
+"I DON'T KNOW WHERE TO BEGIN" o/
+
+more than 192 Branches T-T
+Problème : état d'esprit legacy "là bas cette branche c'est pas clean, je fais
+la mienne". Entre 10 et 20% des branches actives, avec quelqu'un qui avait
+l'espoir de livrer un truc en prod
+Branching Hell x)
+Merges galères, conflits partout, etc
+"Worked on my branch... someone else's problem now" => compliqué à gérer
+2 mois à merger. .
+.
+
+
+
+Trunk based development
+* Trunk commun
+* Seule branche qu'on a le droit d'avoir
+* Toutes les devteam bossent sur le trunk
+* Release candidate : date de code freeze. A ce moment là, on branche : release
+  branch. Un release manager à la responsabilité de cette branch. Les devs
+  continuent à bosser sur le trunk (mais ça part pas en release, **sauf** si
+  c'est un bug fix, auquel cas c'est mergé sur release)
+* Après la date de delivery : on rm la release branch
+* Débuté sans pull requests mais aujourd'hui il y en a
+
+Dashboards partout sur le plateau qui affichent le status de la branche
+Jenkins : build toutes les 2h ou après chaque commit/push
+"Dès qu'un truc est rouge avec son nom dessus, quelqu'un fix"
+
+
+Shortent feedback loop
+* Exemple de l'avion avec le fix de trajectoire. 2min ok, 6h bof...
+* Police ! Surveiller les branches et les releases
+* "Ca fait 3h que t'as commité et que ta branche est pétée, t'as besoin d'aide
+  ?" etc. Maintenant plus besoin, c'est dans la culture !
+
+
+
+Release trains
+* 3 weeks
+* Release train : on livre **tout**, mais avec un mécanisme qui désactive les
+  fonctionnalités pas finies !
+
+"Wait i'm not ready, my feature is not ready"
+Feature toggle ! Comment on désactive ?
+* First toggle version : comments
+* 2nd version : Deployit, tool qui gère le déploiement. Tous les toggles dans
+  des fichiers properties de plugins. Process de continuous delivery
+A tout moment, l'app est capable de vivre avec la version n-1 et n
+* Third toggle control : Ongoing. Framework ff4j, toggles à chaud
+
+* Legacy : Pour aller de la production de la feature à la release : 6sem. Non
+  reg (tests manuels) + uat + certif
+* => Itérations de 3 semaines, mais release train toutes les 6 semaines
+* => Time to market : 12 semaines... 3sem dev + 3sem dev + non reg + uat +
+  certif
+
+Nouvelle plateforme :
+* Sprints de 3 semaines
+* Release train à chaque fin de sprint
+* Quand est ce qu'on teste ? PENDANT le développement. Tester qui passe dès
+  qu'on truc est marqué "à valider", etc
+* Dernier jour avant la release : pseudo code freeze, bug fixes, stabilisation,
+  etc. Les testers doivent avoir le temps de valider les user stories non
+  validées
+* Plus d'UAT. Mis d'accord avec le client, mise sur le feature toggle.
+  Déploiement de pilotes, etc
+* => TTM 3 weeks
+
+Technos : nouvelle plateforme; front = angular. Comment tester ? Jasmin,
+Selenium
+
+
+Frequent release events "agile methodology"
+"That environment is mine !"
+
+
+Environment Pipeline (process de CD)
+* Integration (utilisé par les devs)
+    * 1 commit = 1 deploy
+    * possibly unstable
+    * test deployment
+    * fast feedback loop
+* Homologation (business analyst, quality analyst)
+    * 1 deploy per day
+    * more stable
+    * last changes available
+    * demo
+* uat (user, cpo)
+    * 1 deploy per sprint
+* Producction
+
+Continuous deployment !
+
+
+
+Share & communicate
+A key success factor of this transformation
+
+A product board :
+* Idea
+* MMF
+* Epic
+* Stories
+* Definition of Done à chaque fois
+* Colonne spécifique pour la partie BDD
+* Métriques : chaque user story doit être mesurée en production
+* Après tout ça => bon pour le grooming. Est-ce que la user story est
+  compréhensible ? Pas trop grosse ? Etc
+* Then => study completed
+* Puis board de taff
+
+A FUNCTIONNAL release board. WhatFEATURE do we deliver ?
+A TECHNICAL release board. What MODULE do we deliver ? (quel appli part ?)
+
+* Trop gros pour faire du kanban. 60 personnes qui taffent là dessus, il a
+  fallu mettre en place le truc. Aller vers du kanban à l'avenir peut être ?
+  Garder le release trains de 3 semaines mais se mettre à livrer des changes
+  dès que ready entre temps
+* C'est couteux de mettre en prod (pas de one click to prod atm), du coup on
+  peut pas non plus faire des releases quotidiennes
+
+
+A Kanban Realease board. What TASKS to be done to deliver ? Avec des ops !
+(quoi faire pour que ça passe en prod ?)
+
+
+Chapters at all levels (spotify model)
+* se voir au moins une fois par semaine
+* organization chapter
+* producter cjapter and scrum of scrum
+* user experience chapter
+* qa chapter
+* technical chapter + BBLs
+
+
+
+
+What's next ?
+
+* Bottleneck devops
+* Connaissance des dev limités de la partie ops et inversement
+* Cloud !
+* Docker ?
+* DSI pousse vers du  cloud public (Azure / AWS)
+
+
+"Nothing great was ever achieved without enthusiasm" Ralph Waldo Emerson
+
+## How
+## What's next
+
+
+Déploiement : how ?
+CI ? Tools ?
+Ops : donné et souhaité ?
