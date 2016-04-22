@@ -1,0 +1,368 @@
+Meetup Docker
+Jeudi 21 avril 2016
+
+
+# Docker swarm
+
+* Francis Bouvier
+* Co-founder & CTO @ BlueBoard
+
+## Speaker
+
+Dev python puis Go
+
+Sa boite : Outil de monitoring pour de la vente d'électronique en ligne
+
+
+nodejs : pleeeeeein de mini deps à la con
+
+Host : le daemon docker est très link aux fonctionnalités du kernel
+
+namespaces, etc
+
+
+Docker swarm : multiserveer
+
+Why :
+
+* Déploiement en cluster
+* Répartition de charge et calcul distribué
+* High availability
+
+Swarm agit comme un proxy entre :
+
+* Le client Docker
+* Les daemons docker installés sur chacun des hosts
+
+On fait pointer $DOCKER_HOST vers le daemon Docker Swarm au lieu du daemon
+docker, et il dispaatch. => pas de nouveau concept (contrairement à k8s avec
+les pods)
+
+
+
+Presque entièrement compatible avec l'API Docker => compatible avec tous les
+clients
+
+Exceptions : docker build, et quelques autres
+
+
+## Installation cluster
+
+* Service discovery : docker public, fichier, service tiers (etcd, consul,
+  zookeeper)
+* Sur le serveur master : le daemon docker + le daemon swarm
+* Sur les autres serveurs : le daemon docker + le heartbeat swarm
+* CLI Docker : pointant sur le master swarm
+
+
+docker-machine
+--engine-label region=europe
+puis contraint:region=europe lors du docker run
+
+
+* LB devant tout ça
+
+## HA
+
+* AU moins 2 daemons swarm
+* Un heartbeat est mis en place entre les différents daemon swarm
+* Master election automatique entre les differents daemon swarm
+
+Prérequis :
+
+* Service discovery : etcd; consul
+* Raft : zookeeper
+
+## Ordonnancement
+
+* Swarm supporter plusieurs algos pour l'ordonnancement des containers
+
+### SPread (default)
+
+En fonction du nombre de containers sur chaque server
+Favorise la répartition
+
+### binpack
+
+En fonction des éléments présents sur chaque serveur (image)
+Favorise le regroupement
+
+### random
+
+...
+
+### Compatible cluster Mesos
+
+=> donc on peut utiliser l'ordonnanceur de mesos
+
+##  TODO
+
+### Stabilité
+
+* Fait version 1.0 pour la DockerCon Europe 2015
+* Testé avec 1k serveurs et 30k containers
+
+### Algorithmes ordonnanceurs
+
+* Fait partiellement
+
+### Re-ordonnancement des containers
+
+* Noeud qui down; on respawn ? S'il revient, on fait quoi ?
+* Fait depuis docker 1.11
+
+### Partage des données
+
+* Mode "cluster" avec de la HA : les infos doivent être sync entre les
+  serveurs, etc
+
+# The latest in Docker security
+
+* Diogo Monica
+* Security Team Lead @ Docker inc
+
+
+* Security has to come from the core; can't do it later
+* High level review + some concrete examples
+
+
+## What we will cover
+
+* DOcker should always be used with apps
+* Show how docker provides an additional layer of isolation, making your
+  infrastructure safer by default
+* Sometime, keep using VMs (more isolation !)
+
+* A look at new features
+* Demo
+
+
+Under the hood
+
+* Namespaces
+* Capabilities
+* Cgroups
+
+"Docker hasn't invented containers" => and that's true o/
+
+Vraiment cool thanks aux mecs du kernel Linux
+
+
+Namespaces : provides an isolated view of the system
+- IPC, network, mount, PID, etc
+* Ability to add multi tenancy views on the kernel
+
+Cgroups : kernel feature that limits and isolates the resource usage of a
+collection of processes
+CPU, memory, disk I/O, network, etc
+Cgroups => promise of separating usages. Capability to say "this process cannot
+starve this other one". Hability to segregate what each process (container) can
+use
+
+
+Capabilities : divide the pfivileges of root into distinct units.
+mount, kill, chown, bind, setuid, etc
+"Hey, root does everything :(" => split it into several capabilities
+"Add some power of root to someone but now everything"
+
+
+
+
+Proces restrictions
+
+* Docker containers have reduced capabilities
+* Less than half of the caps of normal processes by default
+* Reduced caps help mitigate impact of escalation to root
+
+
+User namespaces (docker 1.10)
+
+Userns
+
+What ?
+* allow per-namespace mappings of user and group IDs
+A processes(s user and group IDs inside a user namespace can be different from
+its IDs outside of the namespace
+
+Allow to have root, uid 0 inside container => but is no longer uid 0 outside of
+the container !
+Even if someone can escape restrictions, still have to escalate outside of the
+container !
+
+https://integratedcode.us/2016/02/05/docker-1-10-security-userns
+
+Description by Michael Kerrisk : https://lwn.net/Articles/532593
+
+
+Authorization plugins (docker 1.10)
+
+What are authz plugins ?
+
+* plugin that decides on the execution of every api call to the engine
+allows the creation of granular access policies for managing access to the
+daemon
+
+github/docker/docs/extend/authorization.md
+
+Allow on the daemon to be able to read every API call to the docker daemon and
+accept or reject it
+
+
+Seccomp filtering support (docker 1.10)
+
+Secure Computation
+Allows a berkeley packet filter policy to be defined around what system calls
+your container is allowed to execute
+allow several actions : allow, deny, trap, kill, or trace
+supports further filtering based on the arguments passed to the system call
+
+lowest filtering possible : syscalls !
+Allows to :
+* minimize attack surface
+
+D
+
+Default seccomp profile
+
+* ships with docker by defailt
+blocks 54 syscalls that aren't needed, or are too dangerous
+Remember CVE 2016 0728 ? Doesn't work on docker 1.10 by default, du to keyctl
+being blocked
+
+github/docker/docs/security/seccomps.md
+
+
+
+
+
+Noraty 0.2 into Docker content trust (docker 1.11)
+
+* Integrated hardware storage of keys for Docker Content Trust
+Supports key delegations
+
+Ability to sign containers and deliver signed containers
+Signs built in containers
+
+
+Normal way : GPG : private + public, sign with private
+what happens if we want another team to sign stuff ? Give them private key :(
+Only to sign their stuff ? No choice :/
+THis model is inerently broken !
+
+=> ??? Model with concepts of roles
+
+
+
+
+
+PID control group (docker 1.11)
+
+Docker depends on kernel for most of stuffs, embarassing for a long time
+because no control on processes inside containers :(
+
+Solution to fork bomb attacks :
+* limit the number of processes that can be forker inside of a group
+* shipped with linux kernel 4.3
+* turned on by default
+
+
+
+Docker bench update for 1.11
+
+Added 22 new checks since 1.6 version
+
+
+
+
+
+Independant Seuciryt evaluation by NCC Group
+Out yesterday !
+
+Source :"Understanding and hardening linux containers", page 96
+
+Report on containers security
+
+
+
+
+
+
+
+DEMO time
+* docker 1.11
+
+Demo of forkbomb
+
+* docker run --pids-limit=100
+* default : 512 (to check ?)
+bash: fork: try: no child processes
+Win o/
+
+
+
+Docker benchmark
+
+docker/docker-bench-security
+
+
+
+
+
+Seccomp
+block syscalls
+
+sleep.json :
+
+sleep.json (seccomp profile)
+defaultaction : SCMP_ACT_ALLOW
+syscalls :
+  name: nanosleep
+  action: SCMP_ACT_ERRNO
+
+--security-opt seccomp:sleep.json
+
+
+Smae thing with
+name: socket
+demo with nc -v -l
+
+
+--cap-down=chown
+drop chown caps
+touch bla
+id # fucking root
+chown nobody:nobody bla
+
+Useful implem : on a wordpress
+Why ? take chown away. Can't upload stuff and chmod+x it to create a backdoor
+
+
+demo --read-only
+touch bla # read-only fs
+
+
+
+O.M.G
+vuln scanning
+will be public in next months
+part of the business model...
+running for 6 months !
+
+scan stuff, show vulns (CVEs)
+
+
+vtm/vtx hardware support in VMs => paging segregation hw side
+
+
+
+Can't buil security features insides images
+trying to build security profiles (bundled with the image, pubished by the
+)
+
+
+
+how to chose caps by default ?
+"run against every docker hub image, see what fails"
+
+script (open source by docker ?) to parse strace output, and gen security
+profiles that match which syscalls get executed
