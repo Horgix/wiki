@@ -1,0 +1,273 @@
+Meetup Performance User group #31
+28 avril 2016
+Latency: from a dream to nightmare in 100ms
+
+
+@ OCTO Technologies
+
+
+"It’s the network!” is a reflex of every software engineer, and they are very
+often right. The Internet is much more alive than we think. But when our
+applications are online how can we work with unpredictable latency? Can we
+optimise it? 
+
+Since operating Algolia's servers in 38 different datacenters around the world,
+we came across various head-scratching events and we’ll share with you the most
+interesting ones.
+
+Adam Surak is DevOps & Security engineer @algolia
+
+# Intro
+
+perfug.github.io
+Next 19 mai, 3e anniversaire !
+adam.surak@algolia.com
+@AdamSurak
+
+# Algolia
+
+...
+
+Split racks to avoid failure
+... but increase latency
+1ms latency between 2 racks
+@ speed of light => 300km
+
+Now, talk about Internet : New York to Paris
+i.e. AWS with multiple regions (us.east vs europe)
+=> 39ms @ speed of light
+But in reality, 85ms
+
+If we take 2 randoms points on earth, the maximum expected latency should be
+133ms
+But if we take, in reality, Paris to Sidney... 322ms !
+Fiber are not going the shortest path, there are devices in the middle of
+things, etc
+\#millisecondsmatter : search as you type
+the longer it takes, the more impact it has on business
+
++100ms = 1% of revenue of Amazon estimate
+
+
+Algolia : replication on 3 independant servers
+3 differents DCs if needed
+=> primary cluster of 3 close serveurs, short latency (1ms), but when they
+communicate with differents zones => 100, 200ms, and more (master/slave between
+clusters)
+
+# API stats
+
+3x replication
+15 regions
+35+ DCs
+1900+ network links monitored between servers
+400+ servers
+12B+ search queries per month
+20B+ write operations per month
+
+
+# The Internet
+
+* Doesn't optimise for latency
+* Doesn't follow geography
+* Likes airports
+* Bandwidth is the priority
+* Latency via CDN => cache assets as close as the customers as possible
+  => can't do it when every request is different (APIs)
+* Private low-latency backbones : Trading, Google, Riot Games, ...
+  * Trading : ms = deal or not
+  * Google: 2ms, but no DC in France ! Dedicated networks to DCs
+  * Riot Games : real time game. Started to buy fiber in US and build their own
+    network. Going as close to users as possible and then have the best network
+    possible to them
+
+* Internet follows politics and money
+Ex:
+
+* Paris to Singapore. 10 741km. Test from Adam (from office to Singapore) : 18
+  hops. Interesting highlights : th2 (DC in Paris), then paris, paris,
+  marseille, mumbai, mumbai, chennai, singapore, singapore
+  160ms from Paris to Mumbai
+* Test from DC at Paris : 13 hops, path completely different !
+  amstn102, amstn102, (amsterdam), asbnva02 (east coast US), snjsca04
+  (Singapore), etc
+  => 257ms
+
++100ms both from Paris....
+
+
+Airports in the Internet
+* locations coded using IATA codes
+* Paris => CDG
+* New York => JFK or LGA
+* Washington DC - DCA
+* Ashburn - IAD (heart on the Internet as we know it)
+* Los Angeles - LAX
+
+If we try to trace something hosted by CDNs : usually names using airports
+acronyms
+
+
+In production, having to say to hosters "hey, not really best effort on
+network"
+
+
+* Servers in Tokyo and Osaka
+* Same provider
+* 8ms average latency
+Suddenly, alert. Latency inside cluster >= 10ms. New latency ? 110ms. Wtf ?
+"Osaka and Tokyo didn't move so something probably happened" :D
+
+Traceroute from Osaka to Tokyo : 6 hops.
+* 4hops to Tokyo, 10gps !
+Providers can go from Osaka to Tokyo around the world, and they'll say "hey no
+problem"
+
+... so we took a look from Tokyo to Osaka.
+Tokyo, tokyo, Los Angeles, LA, LA, Osaka, Osaka, then OK
+
+Provider : no dedicated link between its 2 DCs, using another network provider
+"same as Internet"
+Tokyo => San Jose => Osaka => Tokyo
+email to provider "not ok"
+"uh and what ? What impact has it ? Only 100ms"
+"......"
+6h after, not resolved ('creative director" handling, etc. When network
+engineer answered, 2minutes and fixed)
+
+None of them was monitoring it, because their customers didn't care and were
+using DCs to connect to the Internet, no directly to another DC
+
+
+
+Another example
+"OK, US."
+West coast
+ervers in San Josa
+Customer in Oregon
+AWS US-West 2
+21ms average latency
+Bouncing around the whole west coast. San jose, to boardman, to seattle, back
+to san jose
+from 21ms to 150-300ms
+Screenshot from newrelic : everything work until it doesn't
+At least they were monitoring it, but fix took a lot of time
+
+=> new route via Denver
+20% packet loss on seattle-denver.....
+issue out of AWS network
+
+No timeout on systems because TCP retries => consequence = long latency
+
+to aws "you have problem", "nope" "ok..." that's amazon
+ping pong with Amazon
+
+Crazy idea : start proxy in new DC deployed
+AWS Availability Zones => AWS-ISP edge => ISP1 edge => Algolia ISP1
+
+nothing solved it. "ok can you move from US west to US east"
+"Yeah ok!" hahaha
+Nice customers, accepting to move their backend like that
+
+AWS-ISP edge breaks so even that didn't solve it
+Nothing to do until Amazon calls its provider and fix it :(
+Router got fixed, connection improved, etc
+
+
+
+
+Now... east coast, heart of the Internet !
+Servers in ashburn area
+2 different providers
+First region, biggest region of AWS
+majority of networks and data there
+
+cluster spreads, different providers, so should avoid issues
+"everything is gonna be ok :D"
+but : 1 provider @ 2ms to AWS, other provider @ 8ms
+Factor of 4 in the latency from the same place to the other one
+
+Same pattern, same investigation
+trace again...
+DC => AWS : ashburn, ashburn, ..., ok, ok, ..., at destination, everything ok !
+AWS => DC : aws, aws, aws, etc..., Washington DC, DC, DC, JFK (New York), JFK,
+JFK, etc, DCA, then back to Ashburn
+=> Ashburn, Washington DC, New York, Wahington DC, Ashburn. Bounce for nothing
+! No one cares. So "hey guys this is not ok"
+
+Cogent : "it's on the side of AWS"
+AWS : "it's on the side of Cogent"
+Both convinced that it was not on their side
+Escalated, network teams didn't care
+AWS : "can you please explain us why 6ms matters and has business impact ? for
+which application ? Why do you care ?" Internal procedure => needs to be
+justified if something has to change
+Can see on the traceroute that it's inside AWS network that it jumps to 8ms
+inside AWS network
+Took.... 8 months to resolve.
+Problem was inside Amazon network, on their side
+Networks in a both mutual agreement, but it hasn't to be symetric
+
+Looking glass helps : network providers give a tool that allows to take a look
+at their router, and if you understand what's inside they almost give you the
+ability to dump a configuration on it and test it
+
+Don't give up ! Someday it was fixed, and it's fine on monitoring, sudden drop
+and even fast than the way that already worked !
+
+
+
+
+Same things everywhere between differents providers, so issues pile up
+
+What can you do with it ? Gonna happen again and again and again
+
+* Independant monitoring
+  * Pingdom : simple, works
+  * ThousanEyes : will give you incredible details on performances. How long
+    page service ? How long takes it to establish SSL connection ? TLS
+    Handshake ? DNS resolution ? etc. Awesome => gogogo. Details graphs, etc
+  * TurboBytes Pulse : provides multiple CDNs networks; network of probes
+    around the world and you can even host one at home ! When you tell "hey
+    tell me about this" and they send to every probe "test that" and give the
+    result. 76 places, lot inside China, then you can analyze it. A bit more
+    burst than pingdom and thousandeyes (continuous, ongoin monitoring)
+  * Custom: painful, costs a lot, requires a really specific usecase. Algolia
+    case : a lot of endpoints, some of the pricings of the previous services
+    don't really take in case this point of view.
+=> try from different places, etc
+
+Note : Customers don't care what is happening, only result. Careful with providers
+choosing !
+
+
+So, Algolia built their own monitoring
+Algolia metrics :
+* DNS : 1.6k metric
+* API Status : 3.3k
+* Latency : 73k
+=> helps knowing if the problem is on customer side or is real : just look at
+probes !
+
+status.algolia.com : public o/
+
+Providers status pages : Usually, green, green with an eye (broken and known),
+orange (broken, known and customer noticed :D), and red (never seen)
+
+
+
+
+"Can we monitor latency in a passive way ?" - Linux 2.4
+Server can determine latency at every transaction : Round Trip Time ! Time
+between SYN/ACK and ACK => can measure latency from every client, everywhere,
+everytime
+
+"Someone was faster than me, invented in 2001..." xD
+Linux kernel TCP infos !
+Available on systems that support the TCP_INFO socket option
+0 cost, just get the latency in the logs :D
+nginx : `log_format latency '$remote_addr $tcpinfo_rtt [$time_iso8602]';`
+Then up to you to analyze it
+
+
+
