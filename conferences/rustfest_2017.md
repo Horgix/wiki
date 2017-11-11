@@ -16,7 +16,9 @@ Pour info, j'ai glissé quelques liens vers des Tweets que j'ai fait en live dan
 
 Speaker : Felix Klock
 
-https://twitter.com/Horgix/status/914057591453569024
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/pnkfelix?ref_src=twsrc%5Etfw">@pnkfelix</a> talking about Rust history of changes at <a href="https://twitter.com/RustFest?ref_src=twsrc%5Etfw">@RustFest</a> . Really want to do more Rust, love clean and safe code :) <a href="https://t.co/xd7PYzL1kF">pic.twitter.com/xd7PYzL1kF</a></p>&mdash; Alexis Chotard (@Horgix) <a href="https://twitter.com/Horgix/status/914057591453569024?ref_src=twsrc%5Etfw">September 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 
 Felix Klock débute la journée en nous présentant un historique de Rust via une narration sous forme d'histoire. L'objectif ? Nous présenter les principaux points d'évolutions, depuis les prémices de Rust jusqu'à aujourd'hui, avec comme message principal "ne pas avoir peur du changement".
 
