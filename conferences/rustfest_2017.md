@@ -3,15 +3,15 @@ Il y a maintenant 1 mois, j'ai eu la chance d'aller au [RustFest](http://zurich.
 Ce RustFest 2017 était composé de conférences le samedi, et de workshops le dimanche.
 La journée du Samedi ayant été relativement dense, avec pas moins de **14 talks successifs sur une seule track**, je vais tenter ici de vous résumer les points principaux ayant retenu mon attention, et me permettrai de passer sous silence les points non pertinents afin d'éviter de vous faire perdre votre temps.
 
-[tl;dr](https://en.wikipedia.org/wiki/TL%3BDR) : rendez-vous à [la conclusion](TODO add link) en fin d'article !
+[tl;dr](https://en.wikipedia.org/wiki/TL%3BDR) : rendez-vous à [la conclusion](http://TODO-add-link) en fin d'article !
 
 # Keynote: A RustFest Carol
 
 - Speaker : [**Felix Klock**](http://zurich.rustfest.eu/sessions/felix) ([`@pnkfelix`](https://twitter.com/pnkfelix))
 
-01-rustfest-carol.jpg
+![01-rustfest-carol](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/01-rustfest-carol.jpg)
 
-Felix Klock débute la journée en nous présentant un **historique de Rust** via une narration sous forme d'histoire. L'objectif ? Nous présenter les principaux points d'évolutions de Rust, que ce soit dans le langage lui même ou ses biliothèques principales telles que [Serde](https://serde.rs/), et ce depuis les prémices de Rust jusqu'à aujourd'hui, avec comme message principal **"ne pas avoir peur du changement"**.
+Felix Klock débute la journée en nous présentant un **historique de Rust** via une narration sous forme d'histoire. L'objectif ? Nous présenter **les principaux points d'évolutions de Rust**, que ce soit dans le langage lui même ou ses biliothèques principales telles que [Serde](https://serde.rs/), et ce depuis les prémices de Rust jusqu'à aujourd'hui, avec comme message principal **"ne pas avoir peur du changement"**.
 
 Pour ceux qui voudraient le rencontrer, Felix est quelqu'un de très sympathique avec beaucoup de recul sur Rust et il organise le meetup [Rust Paris](https://www.meetup.com/Rust-Paris/); n'hésitez donc pas à aller y faire un tour !
 
@@ -19,9 +19,9 @@ Pour ceux qui voudraient le rencontrer, Felix est quelqu'un de très sympathique
 
 - Speaker : [**Élisabeth Henry**](http://zurich.rustfest.eu/sessions/elisabeth) (`@lise_henry` / [`@crowdagger`](https://twitter.com/crowdagger))
 
-02-alt-high-level.jpg
+![02-alt-high-level](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/02-alt-high-level.jpg)
 
-Ce second talk apporte un point de vue très intéressant : celui d'un **utilisateur "high level" de Rust**. L'utilisateur en question ? Une utilisatrice : Elisabeth Henry... autrice française ! Pour quoi se sert elle de Rust ? Pour transformer ses livres qu'elle écrit en markdown vers du HTML et du PDF (ce qui fait vraiment penser à [Pandoc](http://pandoc.org/) mais là n'est pas la question) !
+Ce second talk apporte un point de vue très intéressant : celui d'un **utilisateur "high level" de Rust**. L'utilisateur en question ? Une utilisatrice : Elisabeth Henry... autrice française, qui se sert de Rust pour transformer ses livres qu'elle écrit en markdown vers du HTML et PDF (ce qui fait vraiment penser à [Pandoc](http://pandoc.org/) mais là n'est pas la question) !
 
 Le profil n'est donc pas celui de quelqu'un qui attache une grande importance au langage en lui même, mais vraiment à son **utilisation**.
 
@@ -54,7 +54,7 @@ En résumé :
 
 - Speaker : [**Geoffroy Couprie**](http://zurich.rustfest.eu/sessions/geoffroy) ([`@gcouprie`](https://twitter.com/gcouprie)) - Security & QA at CleverCloud
 
-03-macromancy.jpg
+![03-macromancy](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/03-macromancy.jpg)
 
 Talk très intéressant sur les macros en Rust... mais **de mon point de vue**, tellement impossible à maintenir et tellement loin de l'esprit craftsmanship que je ne m'attarderai pas dessus.
 Les points principaux évoqués sont : macros récursives, imbriquées, et *trace macros* pour afficher l'*expanding* des macros.
@@ -78,7 +78,7 @@ Bien que très intriguant et démonstratif, ce talk n'a pas vraiment de raison d
 - [Slides](https://speakerdeck.com/msmakhlouf/antimony-a-real-time-stream-processing)
 - [Site web - antimony.rs](https://antimony.rs/)
 
-05-antimony.jpg
+![05-antimony](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/05-antimony.jpg)
 
 Mon point de vue sur ce talk est relativement mitigé. Ils nous a été présenté un système d'analyse realtime de requêtes DNS en Rust afin de détecter des malwares, par exemple via des noms de domaines connus ou proche, ou via des critères tels que la longueur.
 
@@ -95,7 +95,7 @@ TODO Rust more
 - [Slides](http://slides.com/thomaswickham/efficient-tdd-in-rust/#/)
 
 https://twitter.com/Horgix/status/914098873018327040
-06-tdd.jpg
+![06-tdd](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/06-tdd.jpg)
 
 Je suis un peu biaisé sur ce talk; en effet, le speaker est un ami ! Mais vu qu'il s'agit d'un talk plus sur l'aspect *"TDD"* que l'aspect *"Rust"*, je pense que vous pourrez en retrouver la majorité sur le [reste du blog](http://blog.xebia.fr/?s=TDD) ou sur [son podcast café-craft](http://www.cafe-craft.fr/).
 
@@ -106,7 +106,7 @@ Elément principal côté *"TDD en Rust"* à retenir : au final le compilateur v
 - Speaker : [**Niklas Adolfsson**](http://zurich.rustfest.eu/sessions/niklas)
 - [Site web - tockos.org](https://www.tockos.org/)
 
-07-iot.jpg
+![07-iot](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/07-iot.jpg)
 
 BLE firmware in Rust
 
@@ -127,7 +127,7 @@ Design de l'OS et des éléments écrits en Rust : https://www.tockos.org/docume
 - Speaker : [**Andrea Lattuada**](http://zurich.rustfest.eu/sessions/andrea) ([`@utaal`](https://twitter.com/utaal)) - Computer Science @ ETH Zürich
 - [Slides](https://speakerdeck.com/utaal/a-hammer-you-can-only-hold-by-the-handle)
 
-08-hammer.jpg
+![08-hammer](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/08-hammer.jpg)
 
 Ce talk était de mon point de vue tout simplement génial, et présentait sous un excellent angle les notions d'[ownership](https://doc.rust-lang.org/book/second-edition/ch04-01-what-is-ownership.html) et de [borrow](https://doc.rust-lang.org/book/second-edition/ch04-02-references-and-borrowing.html) de variables en Rust, qui sont souvent les notions les plus ardues à "prendre en main" lorsque l'on débute en Rust.
 
@@ -145,7 +145,7 @@ Les slides se trouvent ici, même si elles ne sont pas des plus faciles à compr
 
 - Speaker : [**Jorge Aparicio**](http://zurich.rustfest.eu/sessions/jorge)
 
-09-microcontroller.jpg
+![09-microcontroller](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/09-microcontroller.jpg)
 
 Ce talk présentait une gestion low-level de la concurrence en Rust, avec comme guideline la problématique suivante :
 
@@ -161,7 +161,7 @@ Le blog post réalisé bien avant ce talk par son auteur vous donnera bien plus 
 
 - Speaker : [**Pierre Krieger**](http://zurich.rustfest.eu/sessions/pierre)
 
-10-wrap-c-lib.jpg
+![10-wrap-c-lib](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/10-wrap-c-lib.jpg)
 
 Rust étant régulièrement comparé à *"du C, mais en plus safe"*, il est logique de se retrouver avec des besoins communs. Mais plutôt que de réimplémenter intégralement les bibliothèques bas niveau en C, un choix souvent fait est celui de *wrapper* ces bibliothèques C avec du Rust afin d'exposer une API plus safe sans pour autant réimplémenter toute la logique.
 
@@ -211,7 +211,7 @@ Conclusion sur ce talk : lire <https://doc.rust-lang.org/nomicon/> :)
 
 - Speaker : [**Andre Bogus**](http://zurich.rustfest.eu/sessions/llogiq) ([`@llogiq`](https://twitter.com/llogiq))
 
-11-rhymes.jpg
+![11-rhymes](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/11-rhymes.jpg)
 
 Que dire... Ce talk était un véritable show, entièrement en rhymes, mais cela s'arrête là.
 Du coup, il n'y a pas grand chose à en résumer à l'écrit, et honnêtement l'humour ne m'a pas particulièrement atteint.
@@ -229,7 +229,7 @@ Honnêtement, ce talk bien qu'intéressant m'a un peu déçu. Du live coding à 
 - Speaker : [**Fedor Logachev**](http://zurich.rustfest.eu/sessions/fedor)
 - [Site web - SHAR project](http://sharonos.com/)
 
-13-gamedev.jpg
+![13-gamedev](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/13-gamedev.jpg)
 
 Retour plus intéressant que le précédent... mais la partie jeux-vidéos est un peu trop spécialisée pour que je sois à même de la critiquer; si vous voulez en savoir plus n'hésitez pas à venir m'en parler ceci dit !
 
@@ -238,7 +238,7 @@ Retour plus intéressant que le précédent... mais la partie jeux-vidéos est u
 - Speaker : [**Anselm Eickhoff**](http://zurich.rustfest.eu/sessions/llogiq)
 - [Github - Citybound](https://github.com/citybound/citybound)
 
-14-actors.jpg
+![14-actors](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/14-actors.jpg)
 
 **LA** surprise de cette fin de journée. Concrêtement, tout est dans le titre, et le talk était une énorme démonstration du résultat avec explications sur l'implémentation. Globalement : création d'un simulateur de ville à base d'Acteurs distribués, en Rust, avec des performances vraiment impressionnantes.
 
@@ -337,10 +337,6 @@ Notes :
 - Je vais probablement enrichir la page Confluence de ce write-up sur le RustFest avec des liens vers les slides, éventuelles vidéos, etc. et le transformer en blog post :)
 
 Vidéos : https://www.youtube.com/playlist?list=PL85XCvVPmGQj9mqbJizw-zi-EhcpS5jTP
-
-N'hésitez pas si vous avez des questions et/ou remarques !
-
-Bonne soirée,
 
 
 https://twitter.com/Horgix/status/914104108092678144
