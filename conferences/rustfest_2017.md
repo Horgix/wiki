@@ -340,11 +340,11 @@ Pour conclure, l'implémentation des Futures de Rust est **vraiment passionnante
 
 Cette conférence était vraiment une **excellente vue d'ensemble sur ce qui se fait en Rust**, avec des retours et des exemples de cas d'usage très variés, mais toujours avec le même point commun : **le gros avantage de Rust, c'est la safety qu'il apporte** ! Mention spéciale à **Tokio**, la bibliothèque d'I/O asynchrones en Rust, et au [talk d'Alex Crichton à ce sujet](https://www.youtube.com/watch?v=4QZ0-vIIFug&index=16&list=PL85XCvVPmGQj9mqbJizw-zi-EhcpS5jTP) que je vous invite à regarder.
 
-Au final, mon sentiment est que Rust est vraiment approprié lorsque les besoins de *safety* et d'un language complet se font sentir, là où Go, qui lui est souvent opposé, est, je trouve, plus approprié pour prototyper rapidement. Typiquement, je verrais très bien des orchestrateurs ou des composants système bas niveau en Rust ! En revanche, je n'ai vu aucun talk évoquant la construction d'API REST en Rust lors de cette conférence, bien que c soit évidemment possible et facilité par des bibliothèques telles que [Rocket](https://rocket.rs/) pour en faciliter la construction. Si ce point vous intéresse, je vous invite à vous tourner vers [la page *"are we web yet?"* de Rust](http://www.arewewebyet.org/)
+Au final, ce RustFest confirme mon sentiment que Rust est vraiment approprié lorsque les besoins de *safety* et d'un language complet se font sentir, là où Go qui lui est souvent opposé, est, je trouve, plus approprié pour prototyper rapidement. Typiquement, je verrais très bien des orchestrateurs ou des composants système bas niveau en Rust ! En revanche, je n'ai vu aucun talk évoquant la construction d'API REST en Rust lors de cette conférence, bien que ce soit évidemment possible et facilité par des bibliothèques telles que [Rocket](https://rocket.rs/). Si ce point vous intéresse, je vous invite à vous tourner vers [la page *"are we web yet?"* de Rust](http://www.arewewebyet.org/)
 
 Pour conclure, l'exemple typique de use-case parfait pour Rust semble être l'embarqué et les tâches vraiment low-level avec besoin de contrôle fin sur la mémoire tout en gardant une certaine solidité.
 
-[Le prochain RustFest se tiendra à Paris l'année prochaine](https://twitter.com/RustFest/status/914173735976017920)
+Enfin, notez que [le prochain RustFest se tiendra à Paris en 2018](https://twitter.com/RustFest/status/914173735976017920), et je vous y donne donc rendez-vous !
 
 https://twitter.com/Horgix/status/914104108092678144
 
