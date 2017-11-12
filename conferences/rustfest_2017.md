@@ -7,7 +7,7 @@ La journée du Samedi ayant été relativement dense, avec pas moins de **14 tal
 
 # Keynote: A RustFest Carol
 
-- Speaker : **Felix Klock**  ([`@pnkfelix`](https://twitter.com/pnkfelix))
+- Speaker : [**Felix Klock**](http://zurich.rustfest.eu/sessions/felix) ([`@pnkfelix`](https://twitter.com/pnkfelix))
 
 01-rustfest-carol.jpg
 
@@ -17,7 +17,7 @@ Pour ceux qui voudraient le rencontrer, Felix est quelqu'un de très sympathique
 
 # Rust: an alternative to high-level programming languages?
 
-- Speaker : **Élisabeth Henry** ; (`@lise_henry` / [`@crowdagger`](https://twitter.com/crowdagger))
+- Speaker : [**Élisabeth Henry**](http://zurich.rustfest.eu/sessions/elisabeth) (`@lise_henry` / [`@crowdagger`](https://twitter.com/crowdagger))
 
 02-alt-high-level.jpg
 
@@ -52,18 +52,18 @@ En résumé :
 
 # Macromancy - an introduction to Rust macros
 
-- Speaker : **Geoffroy Couprie** ; [`@gcouprie`](https://twitter.com/gcouprie) / Security & QA at CleverCloud
+- Speaker : [**Geoffroy Couprie**](http://zurich.rustfest.eu/sessions/geoffroy) ([`@gcouprie`](https://twitter.com/gcouprie)) - Security & QA at CleverCloud
 
 03-macromancy.jpg
 
 Talk très intéressant sur les macros en Rust... mais **de mon point de vue**, tellement impossible à maintenir et tellement loin de l'esprit craftsmanship que je ne m'attarderai pas dessus.
 Les points principaux évoqués sont : macros récursives, imbriquées, et *trace macros* pour afficher l'*expanding* des macros.
 
-En résumé : les macros de Rust permettent de faire énormément de choses...  presque trop.
+En résumé : **les macros de Rust permettent de faire énormément de choses...  presque trop**.
 
 # Impractical Macros
 
-- Speaker : **Alex Burka**
+- Speaker : [**Alex Burka**](http://zurich.rustfest.eu/sessions/alex)
 
 Pour appuyer le talk précédent, Alex Burka nous a présenté.... un interpréteur [Brainfuck](https://fr.wikipedia.org/wiki/Brainfuck) en **pures macros Rust**, donc capable de comprendre et d'éxecuter du code Brainfuck **à la compilation**.
 
@@ -72,8 +72,8 @@ Bien que très intriguant et démonstratif, ce talk n'a pas vraiment de raison d
 # Antimony: a real time distributed stream processing system
 
 - Speakers :
-    - **Mohammed Makhlouf** ([`@msmakhlouf`](https://twitter.com/msmakhlouf)) - Software Engineer @ GCert
-    - **Mohammad Samir** - ([`@_msamir_`](https://twitter.com/_msamir_))
+    - [**Mohammed Makhlouf**](http://zurich.rustfest.eu/sessions/mohammed) ([`@msmakhlouf`](https://twitter.com/msmakhlouf)) - Software Engineer @ GCert
+    - **Mohammad Samir** ([`@_msamir_`](https://twitter.com/_msamir_))
 
 - [Slides](https://speakerdeck.com/msmakhlouf/antimony-a-real-time-stream-processing)
 - [Site web - antimony.rs](https://antimony.rs/)
@@ -84,13 +84,13 @@ Mon point de vue sur ce talk est relativement mitigé. Ils nous a été présent
 
 Le talk pourrait se résumer en *"On a pris Apache Storm, on a overloadé nos cluster Zookeeper, et on a fini par drastriquement overprovisionner TOUT et par lancer chaque topologies sur un cluster storm séparé avec des clusters ZK séparés"*. Mention honorable pour [pyleus](https://github.com/YelpArchive/pyleus), le framework Python de Yelp pour développer et gérer des topologies Storm.
 
-Au final, la partie la plus intéressante reste sans doute la mention du [paper "Héron" de Twitter](https://dl.acm.org/citation.cfm?id=2742788) sur le stream processing, ainsi que la rapide mention des bibliothèques [Tokio](https://tokio.rs/) et [Mio](https://github.com/carllerche/mio) pour les IO asynchrones en Rust, sur lesquelles je reviendrai plus tard.
+Au final, la partie la plus intéressante reste sans doute la mention du [**paper "Héron" de Twitter**](https://dl.acm.org/citation.cfm?id=2742788) sur le stream processing, ainsi que la rapide mention des bibliothèques [Tokio](https://tokio.rs/) et [Mio](https://github.com/carllerche/mio) pour les **IO asynchrones en Rust**, sur lesquelles je reviendrai plus tard.
 
 TODO Rust more
 
 # Testing strategies and pattern for efficient TDD in Rust
 
-Speaker : Thomas Wickham - [`@mackwic`](https://twitter.com/mackwic) - Consultant @ Octo
+- Speaker : [**Thomas Wickham**](http://zurich.rustfest.eu/sessions/thomas) ([`@mackwic`](https://twitter.com/mackwic)) - Consultant @ Octo
 
 - [Slides](http://slides.com/thomaswickham/efficient-tdd-in-rust/#/)
 
@@ -103,8 +103,7 @@ Elément principal côté *"TDD en Rust"* à retenir : au final le compilateur v
 
 # A Rust-based Runtime for the Internet of Things
 
-- Speaker : **Niklas Adolfsson**
-
+- Speaker : [**Niklas Adolfsson**](http://zurich.rustfest.eu/sessions/niklas)
 - [Site web - tockos.org](https://www.tockos.org/)
 
 07-iot.jpg
@@ -125,7 +124,8 @@ Design de l'OS et des éléments écrits en Rust : https://www.tockos.org/docume
 
 # A hammer you can only hold by the handle
 
-- Speaker : **Andrea Lattuada** ([`@utaal`](https://twitter.com/utaal)) - Computer Science @ ETH Zürich
+- Speaker : [**Andrea Lattuada**](http://zurich.rustfest.eu/sessions/andrea) ([`@utaal`](https://twitter.com/utaal)) - Computer Science @ ETH Zürich
+- [Slides](https://speakerdeck.com/utaal/a-hammer-you-can-only-hold-by-the-handle)
 
 08-hammer.jpg
 
@@ -139,11 +139,11 @@ Ce n'est par conséquent pas vraiment un talk facile à résumer, sans vous renv
 
 Avec cet exemple, il a démontré comment les primitives du langage nous permettent d'avoir une garantie d'*"exactly once"* sur certains appels, une garantie d'ordre ainsi qu'une garantie de drop/free.
 
-Les slides se trouvent ici, même si elles ne sont pas des plus faciles à comprendre sans les explications qui vont avec : https://speakerdeck.com/utaal/a-hammer-you-can-only-hold-by-the-handle
+Les slides se trouvent ici, même si elles ne sont pas des plus faciles à comprendre sans les explications qui vont avec : 
 
 # Fearless concurrency in your microcontroller
 
-- Speaker : **Jorge Aparicio**
+- Speaker : [**Jorge Aparicio**](http://zurich.rustfest.eu/sessions/jorge)
 
 09-microcontroller.jpg
 
@@ -159,7 +159,7 @@ Le blog post réalisé bien avant ce talk par son auteur vous donnera bien plus 
 
 # Mistakes to avoid when writing a wrapper around a C library
 
-- Speaker : **Pierre Krieger**
+- Speaker : [**Pierre Krieger**](http://zurich.rustfest.eu/sessions/pierre)
 
 10-wrap-c-lib.jpg
 
@@ -209,7 +209,7 @@ Conclusion sur ce talk : lire <https://doc.rust-lang.org/nomicon/> :)
 
 # Rust In Rhymes
 
-- Speaker : **Andre 'llogiq' Bogus**
+- Speaker : [**Andre Bogus**](http://zurich.rustfest.eu/sessions/llogiq) ([`@llogiq`](https://twitter.com/llogiq))
 
 11-rhymes.jpg
 
@@ -218,7 +218,7 @@ Du coup, il n'y a pas grand chose à en résumer à l'écrit, et honnêtement l'
 
 # Create Rust games easily
 
-- Speaker : **Lisa** @ Travis CI
+- Speaker : [**Lisa**](http://zurich.rustfest.eu/sessions/lislis) @ Travis CI
 
 Honnêtement, ce talk bien qu'intéressant m'a un peu déçu. Du live coding à base de copier/coller, trop rapide pour être réellement suivi, et avec un résultat final relativement minimal.
 
@@ -226,7 +226,8 @@ Honnêtement, ce talk bien qu'intéressant m'a un peu déçu. Du live coding à 
 
 # SHAR: Rust's gamedev experience
 
-Speaker : Fedor Logachev
+- Speaker : [**Fedor Logachev**](http://zurich.rustfest.eu/sessions/fedor)
+- [Site web - SHAR project](http://sharonos.com/)
 
 13-gamedev.jpg
 
@@ -234,7 +235,7 @@ Retour plus intéressant que le précédent... mais la partie jeux-vidéos est u
 
 # Type-safe & high-perf distributed actor systems with Rust
 
-- Speaker : **Anselm Eickhoff**
+- Speaker : [**Anselm Eickhoff**](http://zurich.rustfest.eu/sessions/llogiq)
 - [Github - Citybound](https://github.com/citybound/citybound)
 
 14-actors.jpg
@@ -247,7 +248,7 @@ TODO
 
 # Async I/O and Tokio
 
-- Speaker : **Alex Crichton**
+- Speaker : [**Alex Crichton**](http://zurich.rustfest.eu/sessions/acrichto)
 
 - [Site web - tokio.rs](https://tokio.rs/)
 
