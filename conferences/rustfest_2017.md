@@ -12,7 +12,7 @@ La journée du Samedi ayant été relativement dense, avec pas moins de **14 tal
 
 ![01-rustfest-carol](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/01-rustfest-carol.jpg)
 
-Felix Klock débute la journée en nous présentant un **historique de Rust** via une narration sous forme d'histoire. L'objectif ? Nous présenter **les principaux points d'évolutions de Rust**, que ce soit dans le langage lui même ou ses biliothèques principales telles que [Serde](https://serde.rs/), et ce depuis les prémices de Rust jusqu'à aujourd'hui, avec comme message principal **"ne pas avoir peur du changement"**.
+Felix Klock débute la journée en nous présentant un **historique de Rust** via une narration sous forme d'histoire. L'objectif ? Nous présenter **les principaux points d'évolutions de Rust**, que ce soit dans le langage lui même ou ses bibliothèques principales telles que [Serde](https://serde.rs/), et ce depuis les prémices de Rust jusqu'à aujourd'hui, avec comme message principal **"ne pas avoir peur du changement"**.
 
 Pour ceux qui voudraient le rencontrer, Felix est quelqu'un de très sympathique avec beaucoup de recul sur Rust et il organise le [meetup Rust Paris](https://www.meetup.com/Rust-Paris/); n'hésitez donc pas à aller y faire un tour !
 
@@ -32,7 +32,7 @@ Pour commencer, elle nous présente sa définition de "high level" :
 - Applications en ligne de commande, applications graphiques, petits jeux, ...
 - Les performances ne sont pas vraiment une problématique
 - La safety en terme de stabilité non plus
-- Pas de réel besoin d'intéractions low level
+- Pas de réel besoin d’interactions low level
 - On se situe plus au niveau de Java/Python/Ruby en terme de comparaison
 
 Elle dresse le portrait suivant des langages de programmation impératifs :
@@ -59,7 +59,7 @@ En résumé :
 ![03-macromancy](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/03-macromancy.jpg)
 
 Talk très intéressant sur les macros en Rust... mais **de mon point de vue**, impossible à maintenir et tellement **loin de l'esprit craftsmanship** que je ne m'attarderai pas dessus.
-Les points principaux évoqués sont : macros récursives, imbriquées, et *trace macros* pour afficher l'*expanding* des macros.
+Les points principaux évoqués sont : macros récursives, imbriquées, et *trace macros* pour afficher l'*expansion* des macros.
 
 En résumé : **les macros de Rust permettent de faire énormément de choses...  presque trop**.
 
@@ -68,7 +68,7 @@ En résumé : **les macros de Rust permettent de faire énormément de choses...
 - Speaker : [**Alex Burka**](http://zurich.rustfest.eu/sessions/alex) ([`@durka42`](https://twitter.com/durka42))
 - [Vidéo](https://www.youtube.com/watch?v=ApOUBBOvZDo&index=4&list=PL85XCvVPmGQj9mqbJizw-zi-EhcpS5jTP)
 
-Pour appuyer le talk précédent, Alex Burka nous a présenté un interpréteur [Brainfuck](https://fr.wikipedia.org/wiki/Brainfuck) en **pures macros Rust**, donc capable de comprendre et d'éxecuter du code Brainfuck **à la compilation**.
+Pour appuyer le talk précédent, Alex Burka nous a présenté un interpréteur [Brainfuck](https://fr.wikipedia.org/wiki/Brainfuck) en **pures macros Rust**, donc capable de comprendre et d’exécuter du code Brainfuck **à la compilation**.
 
 Bien que très intriguant et démonstratif, ce talk n'a pas vraiment de raison d'être détaillé, sachez juste que c'est possible... ***For science!***
 
@@ -83,13 +83,11 @@ Bien que très intriguant et démonstratif, ce talk n'a pas vraiment de raison d
 
 ![05-antimony](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/05-antimony.jpg)
 
-Mon point de vue sur ce talk est relativement mitigé. Ils nous a été présenté un système d'analyse realtime de requêtes DNS en Rust afin de détecter des malwares, par exemple via des noms de domaines connus ou proche, ou via des critères tels que la longueur.
+Mon point de vue sur ce talk est relativement mitigé. Ils nous a été présenté un système d'analyse real-time de requêtes DNS en Rust basé sur Apache Storm afin de détecter des malwares, par exemple via des noms de domaines connus ou proche, ou via des critères tels que la longueur.
 
-Le talk pourrait se résumer en *"On a pris Apache Storm, on a overloadé nos cluster Zookeeper, et on a fini par drastriquement overprovisionner TOUT et par lancer chaque topologies sur un cluster storm séparé avec des clusters ZK séparés"*. Mention honorable pour [pyleus](https://github.com/YelpArchive/pyleus), le framework Python de Yelp pour développer et gérer des topologies Storm.
+Le talk pourrait se résumer en *"On a pris Apache Storm, on a overloadé nos cluster Zookeeper, et on a fini par drastiquement overprovisionner TOUT et par lancer chaque topologies sur un cluster Storm séparé avec des clusters Zookeeper séparés"*. Mention honorable cependant pour [pyleus](https://github.com/YelpArchive/pyleus), le framework Python de Yelp pour développer et gérer des topologies Storm. Très peu de Rust donc.
 
-Au final, la partie la plus intéressante reste sans doute la mention du [**paper "Héron" de Twitter**](https://dl.acm.org/citation.cfm?id=2742788) sur le stream processing, ainsi que la rapide mention des bibliothèques [Tokio](https://tokio.rs/) et [Mio](https://github.com/carllerche/mio) pour les **IO asynchrones en Rust**, sur lesquelles je reviendrai plus tard.
-
-TODO Rust more
+Au final, la partie la plus intéressante reste sans doute la mention du [**papier "Héron" de Twitter**](https://dl.acm.org/citation.cfm?id=2742788) sur le stream processing, ainsi que la rapide mention des bibliothèques [Tokio](https://tokio.rs/) et [Mio](https://github.com/carllerche/mio) pour les **IO asynchrones en Rust**, sur lesquelles je reviendrai plus tard.
 
 # Testing strategies and pattern for efficient TDD in Rust
 
@@ -102,7 +100,7 @@ https://twitter.com/Horgix/status/914098873018327040
 
 Je suis un peu biaisé sur ce talk; en effet, le speaker est un ami ! Mais vu qu'il s'agit d'un talk plus sur le côté *TDD* que l'aspect *Rust*, je pense que vous pourrez en retrouver la majorité sur le [reste du blog](http://blog.xebia.fr/?s=TDD) ou sur [son podcast café-craft](http://www.cafe-craft.fr/).
 
-Elément principal côté *"TDD en Rust"* à retenir : au final le compilateur vérifie déjà tellement de choses et garanti une telle *safety* par les **contraintes qu'il impose** que les tests en sont **relativement réduits** et qu'on peut se **concentrer sur les points vraiment utiles** plutôt que d'avoir des tonnes de *"edge cases"*. Par ailleurs, Rust a tendance à faciliter la gestion des cas d'erreurs, ce qui permet de faire émerger un design solide et complet.
+Élément principal côté *"TDD en Rust"* à retenir : au final le compilateur vérifie déjà tellement de choses et garanti une telle *safety* par les **contraintes qu'il impose** que les tests en sont **relativement réduits** et qu'on peut se **concentrer sur les points vraiment utiles** plutôt que d'avoir des tonnes de *"edge cases"*. Par ailleurs, Rust a tendance à faciliter la gestion des cas d'erreurs, ce qui permet de faire émerger un design solide et complet.
 
 # A Rust-based Runtime for the Internet of Things
 
@@ -348,3 +346,5 @@ Au final, tout ça confirme mon sentiment comme quoi Go c'est bien pour prototyp
 L'exemple typique de use-case parfait pour Rust était l'embarqué et les tâches vraiment low-level avec besoin de contrôle fin sur la mémoire tout en gardant une certaine safety.
 
 https://twitter.com/Horgix/status/914104108092678144
+
+group picture
