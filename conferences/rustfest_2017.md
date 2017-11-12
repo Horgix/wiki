@@ -100,9 +100,9 @@ TODO Rust more
 https://twitter.com/Horgix/status/914098873018327040
 ![06-tdd](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/06-tdd.jpg)
 
-Je suis un peu biaisé sur ce talk; en effet, le speaker est un ami ! Mais vu qu'il s'agit d'un talk plus sur l'aspect *"TDD"* que l'aspect *"Rust"*, je pense que vous pourrez en retrouver la majorité sur le [reste du blog](http://blog.xebia.fr/?s=TDD) ou sur [son podcast café-craft](http://www.cafe-craft.fr/).
+Je suis un peu biaisé sur ce talk; en effet, le speaker est un ami ! Mais vu qu'il s'agit d'un talk plus sur le côté *TDD* que l'aspect *Rust*, je pense que vous pourrez en retrouver la majorité sur le [reste du blog](http://blog.xebia.fr/?s=TDD) ou sur [son podcast café-craft](http://www.cafe-craft.fr/).
 
-Elément principal côté *"TDD en Rust"* à retenir : au final le compilateur vérifie déjà tellement de choses et garanti une telle *safety* par les **contraintes qu'il impose** que les tests en sont **relativement réduits** et qu'on peut se **concentrer sur les points vraiment utiles** plutôt que d'avoir des tonnes de *"edge cases"*. Par ailleurs, Rust a tendance à faciliter la gestion des cas d'erreurs, avec notamment les [types Option](https://doc.rust-lang.org/std/option/), ce qui permet de faire émerger un design solide et complet.
+Elément principal côté *"TDD en Rust"* à retenir : au final le compilateur vérifie déjà tellement de choses et garanti une telle *safety* par les **contraintes qu'il impose** que les tests en sont **relativement réduits** et qu'on peut se **concentrer sur les points vraiment utiles** plutôt que d'avoir des tonnes de *"edge cases"*. Par ailleurs, Rust a tendance à faciliter la gestion des cas d'erreurs, ce qui permet de faire émerger un design solide et complet.
 
 # A Rust-based Runtime for the Internet of Things
 
@@ -333,6 +333,12 @@ Event Loop de Tokio :
 
 Pour conclure, l'implémentation des Futures de Rust est vraiment passionnante, et l'event loop de Tokio se charge de "traduire" les notifications d'I/O du kernel en notifications pour les Tasks qui wrappent les Futures.
 
+# Remarques diverses sur l'évènement lui-même
+
+- Le format des slots, 30min, était vraiment agréable
+- Les organisateurs proposaient [2 couleurs de tour-de-cou pour les badges](https://twitter.com/Horgix/status/914104844000141313) : noir ou rouge, le noir signifiant *"OK pour les photos"* et le rouge *"Je ne souhaite pas être pris en photo durant l'évènement"*. Un grand bravo à eux pour avoir songé au côté vie privée, tant il est maintenant courant de photographier tout et tout le monde lors de conférences pour ensuite tout publier en ligne.
+- Toutes les vidéos sont disponibles sur la [playlist YouTube officielle du RustFest](https://www.youtube.com/playlist?list=PL85XCvVPmGQj9mqbJizw-zi-EhcpS5jTP)
+
 # Conclusion
 
 Cette conférence était vraiment une **excellente vue d'ensemble sur ce qui se fait en Rust**, avec des retours et des exemples de cas d'usage très variés, mais toujours avec le même point commun : **le gros avantage de Rust, c'est la safety qu'il apporte** ! Mention spéciale à Tokio, la bibliothèque d'I/O asynchrones en Rust.
@@ -341,17 +347,4 @@ Au final, tout ça confirme mon sentiment comme quoi Go c'est bien pour prototyp
 
 L'exemple typique de use-case parfait pour Rust était l'embarqué et les tâches vraiment low-level avec besoin de contrôle fin sur la mémoire tout en gardant une certaine safety.
 
-Notes :
-
-- Le format des slots, 30min, était vraiment agréables
-- Les organisateurs bla bla 
-- Toutes les vidéos sont disponibles sur la [playlist YouTube officielel du RustFest](https://www.youtube.com/playlist?list=PL85XCvVPmGQj9mqbJizw-zi-EhcpS5jTP)
-
-
 https://twitter.com/Horgix/status/914104108092678144
-
-
-Room defrag! https://twitter.com/Horgix/status/914033174379995137
-
-https://twitter.com/Horgix/status/914104844000141313
-
