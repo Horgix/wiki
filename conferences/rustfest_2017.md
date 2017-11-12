@@ -87,9 +87,9 @@ Bien que très intriguant et démonstratif, ce talk n'a pas vraiment de raison d
 
 ![05-antimony](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/05-antimony.jpg)
 
-Mon point de vue sur ce talk est relativement mitigé. Ils nous a été présenté un système d'analyse real-time de requêtes DNS en Rust basé sur Apache Storm afin de détecter des malwares, par exemple via des noms de domaines connus ou proche, ou via des critères tels que la longueur.
+Mon point de vue sur ce talk est relativement mitigé. Il nous a été présenté un système d'analyse real-time de requêtes DNS en Rust basé sur Apache Storm afin de détecter des malwares, par exemple via des noms de domaines connus ou proche, ou via des critères tels que la longueur.
 
-Le talk pourrait se résumer en *"On a pris Apache Storm, on a overloadé nos cluster Zookeeper, et on a fini par drastiquement overprovisionner TOUT et par lancer chaque topologies sur un cluster Storm séparé avec des clusters Zookeeper séparés"*. Mention honorable cependant pour [pyleus](https://github.com/YelpArchive/pyleus), le framework Python de Yelp pour développer et gérer des topologies Storm. Très peu de Rust donc.
+Le talk pourrait se résumer en *"On a pris Apache Storm, on a overloadé nos cluster Zookeeper, et on a fini par drastiquement overprovisionner TOUT et par lancer chaque topologie sur un cluster Storm séparé avec des clusters Zookeeper séparés"*. Mention honorable cependant pour [pyleus](https://github.com/YelpArchive/pyleus), le framework Python de Yelp pour développer et gérer des topologies Storm. Très peu de Rust donc.
 
 Au final, la partie la plus intéressante reste sans doute la mention du [**papier "Héron" de Twitter**](https://dl.acm.org/citation.cfm?id=2742788) sur le stream processing, ainsi que la rapide mention des bibliothèques [Tokio](https://tokio.rs/) et [Mio](https://github.com/carllerche/mio) pour les **IO asynchrones en Rust**, sur lesquelles je reviendrai plus tard.
 
@@ -259,8 +259,11 @@ La partie intéressante était plus la logique en elle-même que ce qui est fait
 
 - Speaker : [**Alex Crichton**](http://zurich.rustfest.eu/sessions/acrichto) - Rust developer
 - [Vidéo](https://www.youtube.com/watch?v=4QZ0-vIIFug&index=16&list=PL85XCvVPmGQj9mqbJizw-zi-EhcpS5jTP)
-
 - [Site web - tokio.rs](https://tokio.rs/)
+
+![15-tokio-1](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/15-tokio-1.jpg)
+
+![15-tokio-2](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/15-tokio-2.jpg)
 
 Ce talk est le seul ayant eu lieu le dimanche matin avant les workshop.
 
