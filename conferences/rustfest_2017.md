@@ -5,6 +5,8 @@ La journée du Samedi ayant été relativement dense, avec pas moins de **14 tal
 
 [tl;dr](https://en.wikipedia.org/wiki/TL%3BDR) : rendez-vous à [la conclusion](http://TODO-add-link) en fin d'article !
 
+![rustfest-logo](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/logo.jpg)
+
 # Keynote: A RustFest Carol
 
 - Speaker : [**Felix Klock**](http://zurich.rustfest.eu/sessions/felix) ([`@pnkfelix`](https://twitter.com/pnkfelix)) -  Research Engineer @ Mozilla
@@ -33,7 +35,7 @@ Pour commencer, elle nous présente sa définition de "high level" :
 
 - Applications en ligne de commande, applications graphiques, petits jeux, ...
 - Les performances ne sont pas vraiment une problématique
-- La safety en terme de stabilité non plus
+- La *safety* en terme de stabilité non plus
 - Pas de réel besoin d’interactions low level
 - On se situe plus au niveau de Java/Python/Ruby en terme de comparaison
 
@@ -117,7 +119,7 @@ Ce talk nous présentait [TockOS](https://www.tockos.org/), un OS écrit en Rust
 
 Pourquoi Rust dans un tel contexte ?
 
-- Memory Safety et type safety
+- *Memory safety* et *type safety*
 - Contrôle fin sur la mémoire
 - Très peu d'overhead au runtime
 
@@ -338,10 +340,12 @@ Pour conclure, l'implémentation des Futures de Rust est **vraiment passionnante
 
 Cette conférence était vraiment une **excellente vue d'ensemble sur ce qui se fait en Rust**, avec des retours et des exemples de cas d'usage très variés, mais toujours avec le même point commun : **le gros avantage de Rust, c'est la safety qu'il apporte** ! Mention spéciale à **Tokio**, la bibliothèque d'I/O asynchrones en Rust, et au [talk d'Alex Crichton à ce sujet](https://www.youtube.com/watch?v=4QZ0-vIIFug&index=16&list=PL85XCvVPmGQj9mqbJizw-zi-EhcpS5jTP) que je vous invite à regarder.
 
-Au final, mon sentiment est que Rust est vraiment approprié lorsque les besoins de safety et d'un language complet se font sentir, là où Go, qui lui est souvent opposé, est, je trouve, plus approprié pour prototyper rapidement. Typiquement, je verrais très bien des orchestrateurs ou des composants système bas niveau en Rust ! En revanche, je n'ai vu aucun talk évoquant la construction d'API REST en Rust lors de cette conférence, bien que c soit évidemment possible et facilité par des bibliothèques telles que [Rocket](https://rocket.rs/) pour en faciliter la construction. Si ce point vous intéresse, je vous invite à vous tourner vers [la page *"are we web yet?"* de Rust](http://www.arewewebyet.org/)
+Au final, mon sentiment est que Rust est vraiment approprié lorsque les besoins de *safety* et d'un language complet se font sentir, là où Go, qui lui est souvent opposé, est, je trouve, plus approprié pour prototyper rapidement. Typiquement, je verrais très bien des orchestrateurs ou des composants système bas niveau en Rust ! En revanche, je n'ai vu aucun talk évoquant la construction d'API REST en Rust lors de cette conférence, bien que c soit évidemment possible et facilité par des bibliothèques telles que [Rocket](https://rocket.rs/) pour en faciliter la construction. Si ce point vous intéresse, je vous invite à vous tourner vers [la page *"are we web yet?"* de Rust](http://www.arewewebyet.org/)
 
-Pour conclure, l'exemple typique de use-case parfait pour Rust semble être l'embarqué et les tâches vraiment low-level avec besoin de contrôle fin sur la mémoire tout en gardant une certaine safety.
+Pour conclure, l'exemple typique de use-case parfait pour Rust semble être l'embarqué et les tâches vraiment low-level avec besoin de contrôle fin sur la mémoire tout en gardant une certaine solidité.
+
+[Le prochain RustFest se tiendra à Paris l'année prochaine](https://twitter.com/RustFest/status/914173735976017920)
 
 https://twitter.com/Horgix/status/914104108092678144
 
-group picture
+![group-pic](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/group-pic.jpg)
