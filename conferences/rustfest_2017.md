@@ -27,7 +27,7 @@ Pour ceux qui voudraient le rencontrer, Felix est quelqu'un de très sympathique
 
 ![02-alt-high-level](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/02-alt-high-level.jpg)
 
-Ce second talk apporte un point de vue très intéressant : celui d'un **utilisateur "high level" de Rust**. L'utilisateur en question ? Une utilisatrice : Elisabeth Henry... autrice française, qui se sert de Rust pour transformer ses livres qu'elle écrit en markdown vers du HTML et PDF (ce qui fait vraiment penser à [Pandoc](http://pandoc.org/) mais là n'est pas la question) !
+Ce second talk apporte un point de vue très intéressant : celui d'un **utilisateur "high level" de Rust**. L'utilisateur en question ? Une utilisatrice : Elisabeth Henry... auteure française, qui se sert de Rust pour transformer ses livres qu'elle écrit en markdown vers du HTML et PDF (ce qui fait vraiment penser à [Pandoc](http://pandoc.org/) mais là n'est pas la question) !
 
 Le profil n'est donc pas celui de quelqu'un qui attache une grande importance au langage en lui même, mais vraiment à son **utilisation**.
 
@@ -46,7 +46,7 @@ Elle dresse le portrait suivant des langages de programmation impératifs :
 - La plupart des langages faciles à apprendre cachent en réalité beaucoup de complexité
 - De manière générale, ils ne rendent pas les choses plus simples sur le long terme
 
-Malgré son utilisation high level, elle a pris le temps de comprendre la notion de référence de Rust, qui peuvent être soit partagées, soit mutables, mais pas les deux ! Au final, Rust lui apporte vraiment de la ***memory safety* et évite les *data races***, et même un utilisateur high level fini par se rendre compte de ces avantages.
+Malgré son utilisation high level, elle a pris le temps de comprendre la notion de références de Rust, qui peuvent être soit partagées, soit mutables, mais pas les deux ! Au final, Rust lui apporte vraiment de la ***memory safety* et évite les *data races***, et même un utilisateur high level fini par se rendre compte de ces avantages.
 
 En résumé :
 
@@ -89,7 +89,7 @@ Bien que très intriguant et démonstratif, ce talk n'a pas vraiment de raison d
 
 Mon point de vue sur ce talk est relativement mitigé. Il nous a été présenté un système d'analyse real-time de requêtes DNS en Rust basé sur Apache Storm afin de détecter des malwares, par exemple via des noms de domaines connus ou proche, ou via des critères tels que la longueur.
 
-Le talk pourrait se résumer en *"On a pris Apache Storm, on a overloadé nos cluster Zookeeper, et on a fini par drastiquement overprovisionner TOUT et par lancer chaque topologie sur un cluster Storm séparé avec des clusters Zookeeper séparés"*. Mention honorable cependant pour [pyleus](https://github.com/YelpArchive/pyleus), le framework Python de Yelp pour développer et gérer des topologies Storm. Très peu de Rust donc.
+Le talk pourrait se résumer en *"On a pris Apache Storm, on a surchargé nos cluster Zookeeper, et on a fini par drastiquement sur-provisionner TOUT et par lancer chaque topologie sur un cluster Storm séparé avec des clusters Zookeeper séparés"*. Mention honorable cependant pour [pyleus](https://github.com/YelpArchive/pyleus), le framework Python de Yelp pour développer et gérer des topologies Storm. Très peu de Rust donc.
 
 Au final, la partie la plus intéressante reste sans doute la mention du [**papier "Héron" de Twitter**](https://dl.acm.org/citation.cfm?id=2742788) sur le stream processing, ainsi que la rapide mention des bibliothèques [Tokio](https://tokio.rs/) et [Mio](https://github.com/carllerche/mio) pour les **IO asynchrones en Rust**, sur lesquelles je reviendrai plus tard.
 
@@ -115,7 +115,7 @@ Je suis un peu biaisé sur ce talk; en effet, le speaker est un ami ! Mais vu qu
 
 ![07-iot](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/07-iot.jpg)
 
-Ce talk nous présentait [TockOS](https://www.tockos.org/), un OS écrit en Rust pour tout ce qui est IoT : semblant de micro-kernel, isolation mémoire, processus en user-space, ...
+Ce talk nous présentait [TockOS](https://www.tockos.org/), un **OS écrit en Rust** pour tout ce qui est IoT : semblant de micro-kernel, isolation mémoire, processus en user-space, ...
 
 Pourquoi Rust dans un tel contexte ?
 
@@ -125,7 +125,7 @@ Pourquoi Rust dans un tel contexte ?
 
 Le design de l'OS lui même et des éléments écrits en Rust est disponible dans la documentation de TockOS : <https://www.tockos.org/documentation/design>
 
-Au final, Rust permet d'avoir exactement ce qu'on cherche sur de l'IoT : de la fiabilité, du contrôle bas niveau et une très faible consommation de ressources.
+Au final, Rust permet d'avoir exactement ce qu'on cherche sur de l'IoT : de la **fiabilité**, du **contrôle bas niveau** et une **très faible consommation de ressources**.
 
 # A hammer you can only hold by the handle
 
@@ -137,7 +137,7 @@ Au final, Rust permet d'avoir exactement ce qu'on cherche sur de l'IoT : de la f
 
 Cette présentation d'Andrea Lattuada était de mon point de vue tout simplement géniale, et **abordait sous un angle limpide les notions d'[ownership](https://doc.rust-lang.org/book/second-edition/ch04-01-what-is-ownership.html) et de [borrow](https://doc.rust-lang.org/book/second-edition/ch04-02-references-and-borrowing.html) de variables** en Rust, qui sont souvent les notions les plus ardues à "prendre en main" lorsque l'on débute avec le langage.
 
-Ce n'est par conséquent pas vraiment un talk facile à résumer, sans vous renvoyer vers la documentation de Rust... Mais pour préciser un peu, il a réalisé une analogie très intéressante de l'allocation d'objets et de la gestion de leur lifetime ainsi que l'accès concurrentiel par rapport à une lettre que l'on souhaiterait envoyer :
+Ce n'est par conséquent pas vraiment un talk facile à résumer, sans vous renvoyer vers la documentation de Rust... Mais pour préciser un peu, il a réalisé une analogie très intéressante de l'allocation d'objets et de la gestion de leur *lifetime* ainsi que l'accès concurrentiel par rapport à une lettre que l'on souhaiterait envoyer :
 
 - Enveloppe = type `Option` contenant potentiellement une lettre
 - Lettre = `struct`
@@ -154,11 +154,11 @@ Avec cet exemple, il a démontré comment les primitives du langage nous permett
 
 Ce talk présentait une gestion low-level de la concurrence en Rust, avec comme fil rouge la problématique suivante :
 
-- Tâche 1 : doit se lancer toutes les *10ms* et prend *2ms* à s'éxecuter
-- Tâche 2 : doit se lancer toutes les *1ms* et prend *100µs* à s'éxecuter
+- Tâche 1 : doit se lancer toutes les *10ms* et prend *2ms* à s’exécuter
+- Tâche 2 : doit se lancer toutes les *1ms* et prend *100µs* à s’exécuter
 - Est-il possible de respecter ces contraintes en utilisant du multitasking coopératif ?
 
-Au final, la problématique n'est **pas spécifique à Rust**, mais le langage permet de la résoudre en restant complètement *memory safe*, avec une absence de *deadlocks*, et des *data races* **détectées à la compilation**. Tout ça sur des microcontrollers d'un seul core, sans avoir à se reposer sur un garbage collector; soit exactement le type de points positifs que l'on souhaiterait lorsque l'on travail avec des microcontrolleurs !
+Au final, la problématique n'est **pas spécifique à Rust**, mais le langage permet de la résoudre en restant complètement *memory safe*, avec une absence de *deadlocks*, et des *data races* **détectées à la compilation**. Tout ça sur des microcontrôleurs d'un seul core, sans avoir à se reposer sur un garbage collector; soit exactement le type de points positifs que l'on souhaiterait lorsque l'on travail avec des microcontrôleurs !
 
 Le blog post réalisé bien avant ce talk par son auteur vous donnera bien plus de détails que ce que je ne serais capable d'inclure dans ce résumé : <http://blog.japaric.io/fearless-concurrency/>
 
@@ -177,7 +177,7 @@ Ce talk présentait **9 "erreurs" à éviter lors du wrapping d'une bibliothèqu
 Erreur n°1: **Utiliser la lifetime (scoping) pour des objets "long-lived"**
 
 - ⇒ N'utiliser les lifetimes que pour des objets temporaires (comme des locks ou des accesseurs)
-- ⇒ Utiliser [Arc](https://doc.rust-lang.org/std/sync/struct.Arc.html)/[Rc](https://doc.rust-lang.org/std/rc/struct.Rc.html) (shared pointers dans la lib standard de Rust) pour les dépendences entre des objets long-lived
+- ⇒ Utiliser [Arc](https://doc.rust-lang.org/std/sync/struct.Arc.html)/[Rc](https://doc.rust-lang.org/std/rc/struct.Rc.html) (shared pointers dans la lib standard de Rust) pour les dépendances entre des objets long-lived
 
 Erreur n°2 : **Supposer que les implémentations d'un Trait ne sont pas buguées**
 
@@ -192,7 +192,7 @@ Erreur n°4 : **Oublier les variables globales cachées en C...**
 
 Erreur n°5 : **Ignorer les problèmes de leak potentiels en C**
 
-- ⇒ Ne PAS supposer que les destructeurs seront appelés, et abuser des asserts
+- ⇒ Ne PAS supposer que les destructeurs seront appelés, et abuser des `assert`s
 - ⇒ La manière de décrire la solution m'a fait sourire, alors en voici la citation exacte : *"We'll do something called 'Pre-pooping your pants'.  But don't Google that, or at least do it for Rust."*
 
 Erreur n°6 : **Essayer d'écrire une abstraction haut niveau à la bibliothèque directement**
@@ -221,7 +221,7 @@ Conclusion sur ce talk : lire <https://doc.rust-lang.org/nomicon/> !
 
 ![11-rhymes](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/11-rhymes.jpg)
 
-Que dire... Ce talk était un **véritable show**, entièrement en rhymes, mais cela s'arrête là.
+Que dire... Ce talk était un **véritable show**, entièrement en rimes, mais cela s'arrête là.
 
 Du coup, il n'y a pas grand chose à en résumer à l'écrit, et son appréciation dépendra grandement de votre humour ! Si vous souhaitez vous laisser tenter, le lien vers la vidéo est un peu plus haut.
 
@@ -240,17 +240,17 @@ Honnêtement, ce talk bien qu'intéressant m'a un peu déçu. Du live coding à 
 
 ![13-gamedev](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/13-gamedev.jpg)
 
-Retour plus intéressant que le précédent... mais la partie jeux-vidéos est un peu trop spécialisée pour que je sois à même de la critiquer; si vous voulez en savoir plus n'hésitez pas à jeter un oeil à la vidéo !
+Retour plus intéressant que le précédent... mais la partie jeux-vidéos est un peu trop spécialisée pour que je sois à même de la critiquer; si vous voulez en savoir plus n'hésitez pas à jeter un œil à la vidéo !
 
 # Type-safe & high-perf distributed actor systems with Rust
 
-- Speaker : [**Anselm Eickhoff**](http://zurich.rustfest.eu/sessions/anselm) ([`@ae_play`](https://twitter.com/ae_play)) - Computer science student
+- Speaker : [**Anselm Eickhoff**](http://zurich.rustfest.eu/sessions/anselm) ([`@ae_play`](https://twitter.com/ae_play)) - Computer science dentue
 - [Vidéo](https://www.youtube.com/watch?v=LiIoE8ArACs&index=15&list=PL85XCvVPmGQj9mqbJizw-zi-EhcpS5jTP)
 - [Github - Citybound](https://github.com/citybound/citybound)
 
 ![14-actors](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/14-actors.jpg)
 
-**LA** surprise de cette fin de journée. Concrêtement, tout est dans le titre, et le talk était une énorme démonstration du résultat avec explications sur l'implémentation. Globalement : création d'un simulateur de ville à base d'**Acteurs distribués, en Rust**, avec des performances vraiment impressionnantes.
+**LA** surprise de cette fin de journée. Concrètement, tout est dans le titre, et le talk était une énorme démonstration du résultat avec explications sur l'implémentation. Globalement : création d'un simulateur de ville à base d'**Acteurs distribués, en Rust**, avec des performances vraiment impressionnantes.
 
 Je n'ai pas pris énormément de notes tellement le talk était passionnant pour être honnête. Je vous invite cependant à en regarder la vidéo dont le lien est disponible ci-dessus et qui en vaut le détour !
 La partie intéressante était plus la logique en elle-même que ce qui est fait en Rust; le point à retenir sur Rust étant la possibilité d'implémenter un tel **design d'acteurs distribués** de manière vraiment propre et solide notamment grâce à la type-safety fournie par Rust, le tout de manière performante.
@@ -265,27 +265,27 @@ La partie intéressante était plus la logique en elle-même que ce qui est fait
 
 ![15-tokio-2](https://s3-eu-west-1.amazonaws.com/xebia-blog-articles/rustfest-2017/15-tokio-2.jpg)
 
-Ce talk est le seul ayant eu lieu le dimanche matin avant les workshop.
+Ce talk est le seul ayant eu lieu le dimanche matin avant les workshops
 
 Pour contexte, Alex Crichton est un des **Core développeurs de Rust** qui a travaillé dessus pour Mozilla pendant 4 ans. C'est aussi **un des principaux auteurs de [Cargo](http://doc.crates.io/)**, le gestionnaire de dépendances de Rust, ainsi qu'**un des mainteneurs de la lib standard de Rust et de [Tokio](https://tokio.rs/)**, LA lib pour des I/O asynchrones en Rust, sur laquelle cette présentation portait justement.
 
-Ce talk, contrairement à ce qui pourrait sembler à la lecture du titre, n'est PAS une présentation de *"comment faire de l'async avec Tokio"*, mais plutôt...  ***"comment on implémente de l'async, en vrai ?"***. En effet, c'est super d'avoir de l'async en tant qu'utilisateur, mais quelles sont les mécanismes utilisés dérrière ?  Cette approche en fait donc définitivement le **talk le plus intéressant de ce RustFest**, ce qui en fait une très belle clôture mais aussi quelque chose de difficile à vraiment résumer.
+Ce talk, contrairement à ce qui pourrait sembler à la lecture du titre, n'est PAS une présentation de *"comment faire de l'async avec Tokio"*, mais plutôt...  ***"comment on implémente de l'async, en vrai ?"***. En effet, c'est super d'avoir de l'async en tant qu'utilisateur, mais quelles sont les mécanismes utilisés derrière ?  Cette approche en fait donc définitivement le **talk le plus intéressant de ce RustFest**, ce qui en fait une très belle clôture mais aussi quelque chose de difficile à vraiment résumer.
 
 Tokio c'est quoi ?
 
-- Concrêtement :
+- Concrètement :
     1. Utilisateur : *"Je voudrais le contenu de <https://blog.xebia.fr/>"*
-    2. Tokio : *"Ok, tiens, voilà un `Future<Vec<u8>>`*
+    2. Tokio : *"OK, tiens, voilà un `Future<Vec<u8>>`*
 - **Tokio = Mio + Futures**
 - [Mio](https://github.com/carllerche/mio) = bibliothèque d'I/O cross-platform en Rust
 - [Futures](https://docs.rs/futures/0.1.17/futures/) = sortes de ["promises"](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) de Rust
     - Sentinelle pour des valeurs "en cours de calcul"
-    - Internallement, capture un état pour produire une valeur
+    - En interne, capture un état pour produire une valeur
     - Composition de Futures possible
     - `Trait`s pour une valeur (Future), plusieurs valeurs (Stream) ou des valeurs *"push"* (Sink)
     - *Oneshot channels* : calcul in-memory de valeurs de manière asynchrone - `std::sync::mpsc` : Channels multi-provider / single-consumer
 - Tokio combine donc Mio et les Futures afin de **proposer une event loop et des Futures basées sur des I/O**
-- Actuellement, Tokio est utilisé en production par un certain nombre d'entreprises et supporte les méthodes d'I/O suivantes : TCP, UDP, Sockets Unix, Named pipes, signaux, HTTP, HTTP/2, websockets, ...
+- Actuellement, Tokio est utilisé en production par un certain nombre d'entreprises et supporte les méthodes d'I/O suivantes : TCP, UDP, Sockets UNIX, Named pipes, signaux, HTTP, HTTP/2, websockets, ...
 
 Inconvénients des callbacks :
 
@@ -309,8 +309,8 @@ Futures et Tasks :
 Futures basées sur du polling :
 
 - Une valeur de retour à `None` signifie *"not ready"*
-- Un retour de `Some` (type Option) résoud la Future
-- ... mais en cas de `None`, **quand rappeller `poll` ?**
+- Un retour de `Some` (type Option) résout la Future
+- ... mais en cas de `None`, **quand rappeler `poll` ?**
 
 - Les Futures appartiennent à une seule Task
 - Si la Future n'est pas prête... la Task doit **savoir quand réessayer** !
@@ -325,13 +325,13 @@ I/O et Futures via poll :
 
 Event Loop de Tokio :
 
-- Concrêtement :
+- Concrètement :
     - Kernel : *"Le file descriptor 42 est prêt pour que tu ailles lire dessus"*
-    - Tokio : *"Ok, je vais réveiller la Task qui attendait"*
+    - Tokio : *"OK, je vais réveiller la Task qui attendait"*
 - Responsable de **bloquer le thread courant**
-- Dispatch les events reçus de la part du kernel (pas de notifications de ce genre de chose sur Windows visiblement)
+- Dispatch les évènements reçus de la part du kernel (pas de notifications de ce genre de chose sur Windows visiblement)
 
-Pour conclure, l'implémentation des Futures de Rust est **vraiment passionnante**, et l'event loop de Tokio se charge de "traduire" les notifications d'I/O du kernel en notifications pour les Tasks qui wrappent les Futures. Au final, bien que l'on entende souvent *"poll-er c'est mal"*, **il y a toujours quelque chose à un endroit qui finit par faire du polling**, mais dans le cas présent on le délègue le plus loin possible, en l'occurence au kernel Linux lui-même.
+Pour conclure, l'implémentation des Futures de Rust est **vraiment passionnante**, et l'event loop de Tokio se charge de "traduire" les notifications d'I/O du kernel en notifications pour les Tasks qui wrappent les Futures. Au final, bien que l'on entende souvent *"poll-er c'est mal"*, **il y a toujours quelque chose à un endroit qui finit par faire du polling**, mais dans le cas présent on le délègue le plus loin possible, en l’occurrence au kernel Linux lui-même.
 
 # Remarques diverses sur l'évènement lui-même
 
@@ -343,11 +343,11 @@ Pour conclure, l'implémentation des Futures de Rust est **vraiment passionnante
 
 Cette conférence était vraiment une **excellente vue d'ensemble sur ce qui se fait en Rust**, avec des retours et des exemples de cas d'usage très variés, mais toujours avec le même point commun : **le gros avantage de Rust, c'est la safety qu'il apporte** ! Mention spéciale à **Tokio**, la bibliothèque d'I/O asynchrones en Rust, et au [talk d'Alex Crichton à ce sujet](https://www.youtube.com/watch?v=4QZ0-vIIFug&index=16&list=PL85XCvVPmGQj9mqbJizw-zi-EhcpS5jTP) que je vous invite à regarder.
 
-Au final, ce RustFest confirme mon sentiment que Rust est vraiment approprié lorsque les besoins de *safety* et d'un language complet se font sentir, là où Go qui lui est souvent opposé, est, je trouve, plus approprié pour prototyper rapidement. Typiquement, je verrais très bien des orchestrateurs ou des composants système bas niveau en Rust ! En revanche, je n'ai vu aucun talk évoquant la construction d'API REST en Rust lors de cette conférence, bien que ce soit évidemment possible et facilité par des bibliothèques telles que [Rocket](https://rocket.rs/). Si ce point vous intéresse, je vous invite à vous tourner vers [la page *"are we web yet?"* de Rust](http://www.arewewebyet.org/)
+Au final, ce RustFest confirme mon sentiment que Rust est vraiment approprié lorsque les besoins de *safety* et d'un langage complet se font sentir, là où Go qui lui est souvent opposé, est, je trouve, plus approprié pour prototyper rapidement. Typiquement, je verrais très bien des orchestrateurs ou des composants système bas niveau en Rust ! En revanche, je n'ai vu aucun talk évoquant la construction d'API REST en Rust lors de cette conférence, bien que ce soit évidemment possible et facilité par des bibliothèques telles que [Rocket](https://rocket.rs/). Si ce point vous intéresse, je vous invite à vous tourner vers [la page *"are we web yet?"* de Rust](http://www.arewewebyet.org/)
 
 Pour conclure, l'exemple typique de use-case parfait pour Rust semble être l'embarqué et les tâches vraiment low-level avec besoin de contrôle fin sur la mémoire tout en gardant une certaine solidité.
 
-Enfin, notez que [le prochain RustFest se tiendra à Paris en 2018](https://twitter.com/RustFest/status/914173735976017920), et je vous y donne donc rendez-vous !
+Enfin, notez que [le prochain RustFest se tiendra à Paris en 2018](https://twitter.com/RustFest/status/914173735976017920), et je vous y donne donc rendez-vous :)
 
 https://twitter.com/Horgix/status/914104108092678144
 
